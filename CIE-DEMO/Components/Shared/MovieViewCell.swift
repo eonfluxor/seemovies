@@ -38,7 +38,6 @@ class MovieViewCell: UICollectionViewCell {
         setupContainers()
         setupDescriptionViews()
         setupImageDisplay()
-        setupActions()
     }
     
     
@@ -221,22 +220,7 @@ extension MovieViewCell{
         
     }
     
-    func setupActions(){
-        
-        favButton.didTapAdd = {
-            guard let movie = self.movie else {
-                return
-            }
-            Services.flux.dispatch(FluxAction.addFavorite(movie))
-        }
-        
-        favButton.didTapRemove = {
-            guard let movie = self.movie else {
-                return
-            }
-            Services.flux.dispatch(FluxAction.removeFavorite(movie))
-        }
-    }
+ 
     
     
     

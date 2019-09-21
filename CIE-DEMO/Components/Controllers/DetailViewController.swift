@@ -43,7 +43,12 @@ class DetailViewController: BaseViewController {
         super.viewDidLoad()
         setupContainers()
         setupInfo()
-        displayEmtpyInfo()
+        displayCachedInfo()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        displayCachedInfo()
         displayExtraInfo()
     }
     
@@ -89,6 +94,7 @@ extension DetailViewController {
         posterShadow.layer.shadowOpacity = 0.6
         posterShadow.layer.shadowOffset = .zero
         posterShadow.layer.shadowRadius = 10
+        posterShadow.isUserInteractionEnabled = true
         
         ratingDisplay = RatingView()
         
@@ -99,9 +105,10 @@ extension DetailViewController {
         view.addSubview(backdropContainer)
         view.addSubview(infoContainer)
         view.addSubview(posterShadow)
+        view.addSubview(favoriteButton)
         posterShadow.addSubview(poster)
         posterShadow.addSubview(ratingDisplay)
-        posterShadow.addSubview(favoriteButton)
+       
         
         backdropContainerPoster.snp_makeConstraints { (make) in
             
@@ -242,7 +249,7 @@ extension DetailViewController {
 
 extension DetailViewController {
     
-    func displayEmtpyInfo(){
+    func displayCachedInfo(){
         if let url =  URL(string:movie.poster_url!) {
             backdropContainerPoster.af_setImage(
                 withURL: url,
@@ -270,30 +277,34 @@ extension DetailViewController {
     
     func displayExtraInfo(){
         
-        if let url =  URL(string:movie.back_url!) {
-            backdropContainer.alpha = 0
-            backdropContainer.transform = CGAffineTransform.init(scaleX: 2.0, y: 2.0)
-            backdropContainer.af_setImage(
-                withURL: url,
-                placeholderImage: nil,
-                filter: nil,
-                imageTransition: .crossDissolve(0.5),
-                completion: { [weak self] response in
-                    if let image = response.value {
-                        self?.displayOptimalTitleColor(image:image)
-                    }
-            })
-                
-            UIView.animate(withDuration: 0.5, delay: 1, options: [], animations: {
-                self.backdropContainer.alpha = 1
-                self.backdropContainer.transform = CGAffineTransform.identity
-            }, completion:nil);
-            
+        favoriteButton.setupWith(movie: movie)
+        
+        guard let url =  URL(string:movie.back_url!) else {
+            return
         }
+        
+        backdropContainer.alpha = 0
+        backdropContainer.transform = CGAffineTransform.init(scaleX: 2.0, y: 2.0)
+        backdropContainer.af_setImage(
+            withURL: url,
+            placeholderImage: nil,
+            filter: nil,
+            imageTransition: .crossDissolve(0.5),
+            completion: { [weak self] response in
+                if let image = response.value {
+                    self?.displayOptimalTitleColor(image:image)
+                }
+        })
+        
+        UIView.animate(withDuration: 0.5, delay: 1, options: [], animations: {
+            self.backdropContainer.alpha = 1
+            self.backdropContainer.transform = CGAffineTransform.identity
+        }, completion:nil);
         
        
     }
 }
+
 extension DetailViewController  {
     
     func displayOptimalTitleColor(image : UIImage){

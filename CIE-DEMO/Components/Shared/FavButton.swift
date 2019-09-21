@@ -14,8 +14,7 @@ class FavButton: UIView {
     
     var movie : Movie!
     var label : UILabel!
-    var didTapAdd : DidTapFav?
-    var didTapRemove : DidTapFav?
+   
     
     override init(frame: CGRect) {
         
@@ -33,7 +32,7 @@ class FavButton: UIView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.baselineAdjustment = .alignCenters
-         label.text = "Favorite?"
+        label.text = "Favorite?"
         
         addSubview(label)
         
@@ -70,10 +69,10 @@ extension FavButton {
     
     @objc func didTapGesture(){
         if Services.favs.isFav(movie: movie) {
-            didTapRemove?()
+            Services.flux.dispatch(FluxAction.removeFavorite(movie))
             updateDisplay(force:false)
         } else{
-            didTapAdd?()
+            Services.flux.dispatch(FluxAction.addFavorite(movie))
             updateDisplay(force:true)
         }
        
@@ -97,3 +96,4 @@ extension FavButton {
         }
     }
 }
+
