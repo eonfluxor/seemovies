@@ -1,0 +1,99 @@
+//
+//  FavButton.swift
+//  CIE-DEMO
+//
+//  Created by hassan uriostegui on 9/21/19.
+//  Copyright © 2019 eonflux. All rights reserved.
+//
+
+import UIKit
+
+typealias DidTapFav = ()->Void
+
+class FavButton: UIView {
+    
+    var movie : Movie!
+    var label : UILabel!
+    var didTapAdd : DidTapFav?
+    var didTapRemove : DidTapFav?
+    
+    override init(frame: CGRect) {
+        
+        super.init(frame: frame)
+        backgroundColor = .lightGray
+        layer.cornerRadius = 4
+        clipsToBounds = true
+        
+        
+        label = UILabel()
+        label.textColor = Services.theme.WHITE
+        
+        label.font =  Services.theme.H2_FONT_BOLD
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.baselineAdjustment = .alignCenters
+         label.text = "Favorite?"
+        
+        addSubview(label)
+        
+        label.snp_makeConstraints { (make) in
+            make.edges.equalToSuperview().inset(4)
+            make.center.equalToSuperview()
+        }
+        
+        ///
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didTapGesture))
+        addGestureRecognizer(tap)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupWith(movie: Movie){
+        self.movie = movie
+        self.setNeedsLayout()
+        
+    }
+    
+    override func layoutSubviews() {
+        updateDisplay()
+    }
+    
+}
+
+
+
+extension FavButton {
+    
+    @objc func didTapGesture(){
+        if Services.favs.isFav(movie: movie) {
+            didTapRemove?()
+            updateDisplay(force:false)
+        } else{
+            didTapAdd?()
+            updateDisplay(force:true)
+        }
+       
+    }
+    
+    func updateDisplay(force : Bool? = nil){
+        
+        guard let movie = self.movie else {
+            return
+        }
+        
+        let added = Services.favs.isFav(movie: movie)
+        
+        if added || force == true {
+            backgroundColor = .lightGray
+            label.text = "- Favorite"
+        } else if !added || force == false {
+            
+            backgroundColor = .blue
+            label.text = "+ Favorite"
+        }
+    }
+}

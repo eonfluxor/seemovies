@@ -8,6 +8,7 @@
 
 import UIKit
 import PINRemoteImage
+import ChameleonFramework
 
 class DetailViewController: BaseViewController {
     
@@ -35,6 +36,7 @@ class DetailViewController: BaseViewController {
     var ratingDisplay : RatingView!
     var overviewLabel : UILabel!
     var similarLabel : UILabel!
+    var favoriteButton : FavButton!
     
     override func viewDidLoad() {
         
@@ -42,7 +44,7 @@ class DetailViewController: BaseViewController {
         setupContainers()
         setupInfo()
         displayEmtpyInfo()
-        displayInfo()
+        displayExtraInfo()
     }
     
   
@@ -84,15 +86,22 @@ extension DetailViewController {
         posterShadow = UIView()
         posterShadow.backgroundColor = .red
         posterShadow.layer.shadowColor = UIColor.black.cgColor
-        posterShadow.layer.shadowOpacity = 1
+        posterShadow.layer.shadowOpacity = 0.6
         posterShadow.layer.shadowOffset = .zero
         posterShadow.layer.shadowRadius = 10
         
+        ratingDisplay = RatingView()
+        
+        favoriteButton = FavButton()
+        
+     
         view.addSubview(backdropContainerPoster)
         view.addSubview(backdropContainer)
         view.addSubview(infoContainer)
         view.addSubview(posterShadow)
         posterShadow.addSubview(poster)
+        posterShadow.addSubview(ratingDisplay)
+        posterShadow.addSubview(favoriteButton)
         
         backdropContainerPoster.snp_makeConstraints { (make) in
             
@@ -124,6 +133,22 @@ extension DetailViewController {
             make.edges.equalTo(posterShadow)
         }
         
+        ratingDisplay.snp_makeConstraints { (make) in
+            make.left.equalTo(poster.snp_right).offset(PADDING)
+            make.right.equalTo(poster.snp_right).offset(PADDING + 42)
+            make.top.equalTo(poster.snp_bottomMargin).inset(PADDING+42)
+            make.bottom.equalTo(poster.snp_bottomMargin)
+        }
+        
+        favoriteButton.snp_makeConstraints { (make) in
+            make.left.equalTo(poster.snp_right).offset(PADDING)
+            make.right.equalTo(poster.snp_right).offset(PADDING + 90)
+            make.top.equalTo(poster.snp_topMargin).offset(PADDING)
+            make.bottom.equalTo(poster.snp_topMargin).offset(PADDING+30)
+        }
+        
+        
+       
         
     }
     
@@ -133,6 +158,7 @@ extension DetailViewController {
         titleLabel.textColor = Services.theme.LIGHT_GREY
         titleLabel.text = "The Martian"
         titleLabel.font =  Services.theme.H1_FONT
+        titleLabel.textAlignment = .center
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
         
@@ -140,6 +166,7 @@ extension DetailViewController {
         genreLabel.textColor = Services.theme.LIGHT_GREY
         genreLabel.text = "Drama, Adventure, Science Fiction"
         genreLabel.font =  Services.theme.H3_FONT
+        genreLabel.textAlignment = .center
         genreLabel.adjustsFontSizeToFitWidth = true
         genreLabel.minimumScaleFactor = 0.5
         
@@ -167,9 +194,9 @@ extension DetailViewController {
         
         
         titleLabel.snp_makeConstraints { (make) in
-            make.top.equalTo(  Double(Services.theme.HEADER_HEIGHT) - (60) )
-            make.left.equalTo(posterShadow.snp_right).offset(PADDING)
-            make.right.lessThanOrEqualTo(view).inset(PADDING)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin).offset(PADDING*3)
+            make.left.equalTo(PADDING)
+            make.right.equalTo(view).inset(PADDING)
             make.height.lessThanOrEqualTo(30)
         }
         
@@ -205,8 +232,11 @@ extension DetailViewController {
             make.height.lessThanOrEqualTo(30)
         }
         
-        
     }
+    
+//    func setup
+    
+    
 }
 
 
@@ -214,7 +244,18 @@ extension DetailViewController {
     
     func displayEmtpyInfo(){
         if let url =  URL(string:movie.poster_url!) {
-            backdropContainerPoster.af_setImage(withURL: url)
+            backdropContainerPoster.af_setImage(
+                withURL: url,
+                placeholderImage: nil,
+                filter: nil,
+                imageTransition: .crossDissolve(0.5),
+                completion: { [weak self] response in
+                    
+                    if let image = response.value {
+                         self?.displayOptimalTitleColor(image:image)
+                    }
+                   
+            })
         }
         
         if let url =  movie.poster_url {
@@ -223,14 +264,26 @@ extension DetailViewController {
         
         titleLabel.text = movie.title
         overviewLabel.text = movie.description
+        
+     
     }
     
-    func displayInfo(){
+    func displayExtraInfo(){
         
         if let url =  URL(string:movie.back_url!) {
             backdropContainer.alpha = 0
             backdropContainer.transform = CGAffineTransform.init(scaleX: 2.0, y: 2.0)
-            backdropContainer.af_setImage(withURL: url)
+            backdropContainer.af_setImage(
+                withURL: url,
+                placeholderImage: nil,
+                filter: nil,
+                imageTransition: .crossDissolve(0.5),
+                completion: { [weak self] response in
+                    if let image = response.value {
+                        self?.displayOptimalTitleColor(image:image)
+                    }
+            })
+                
             UIView.animate(withDuration: 0.5, delay: 1, options: [], animations: {
                 self.backdropContainer.alpha = 1
                 self.backdropContainer.transform = CGAffineTransform.identity
@@ -238,13 +291,25 @@ extension DetailViewController {
             
         }
         
-        if let url =  movie.poster_url {
-            poster.displayImage(url)
+       
+    }
+}
+extension DetailViewController  {
+    
+    func displayOptimalTitleColor(image : UIImage){
+        
+        DispatchQueue.main.async {
+            self.titleLabel.textColor = self.constrastingImageColor(image : image)
+            self.genreLabel.textColor = self.constrastingImageColor(image : image)
         }
+       
+    }
+    
+    func constrastingImageColor(image : UIImage) -> UIColor{
         
-        titleLabel.text = movie.title
-        overviewLabel.text = movie.description
-        
+        let color = AverageColorFromImage( image)
+        let result = UIColor(contrastingBlackOrWhiteColorOn:color, isFlat:false)
+        return result
     }
 }
 

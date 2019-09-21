@@ -12,6 +12,7 @@ import ObjectMapper
 struct Movie : Mappable{
     
     var id:String?
+    var idInt:Int?
     var title:String! = "Untitled"
     var description:String! = ""
     var backdrop_path:String?
@@ -27,7 +28,8 @@ struct Movie : Mappable{
     }
     
     mutating func mapping(map: Map) {
-        id              <-  map["id"]
+        idInt           <-  map["id"]
+        
         title           <-  map["title"]
         description     <-  map["overview"]
         backdrop_path   <- map["backdrop_path"]
@@ -36,6 +38,7 @@ struct Movie : Mappable{
         vote_count      <- map[ "vote_count"]
         vote_average    <- map["vote_average"]
         
+        id = "\(idInt ?? 0)"
         back_url = "https://image.tmdb.org/t/p/original\(backdrop_path ?? "")"
         poster_url = "https://image.tmdb.org/t/p/original\(poster_path  ?? "")"
     }

@@ -15,9 +15,12 @@ class HomeViewController: BaseViewController  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupCollectionView();
-        reloadData();
+     
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        reloadData()
     }
 
 }
@@ -41,19 +44,16 @@ extension HomeViewController{
     }
     
     func reloadData(){
-        assert(self.list != nil, "Movie list not initialized!")
-        self.list.loadMovies()
+        guard let list = self.list else {
+            return
+        }
+        list.loadMovies()
     }
 }
 
 extension HomeViewController: MoviesCollectionViewProtocol{
     
-    
-    
     func didSelectMovie(_ movie:Movie) {
-        
-        
-        
         Services.router.pushDetailViewController(movie: movie)
         //        let detailAnimator = NavAnimators.ZoomOut()
         //        Services.router.tab(.Home).push(controller: .MovieDetail, info:NavInfo(params:["movie":movie]), animator:detailAnimator)

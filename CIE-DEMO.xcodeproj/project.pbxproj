@@ -29,6 +29,11 @@
 		264CA0682336B11B00C4293B /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0672336B11B00C4293B /* PosterView.swift */; };
 		264CA06A2336B12300C4293B /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0692336B12300C4293B /* RatingView.swift */; };
 		264CA06E2336B42000C4293B /* RouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA06D2336B42000C4293B /* RouterService.swift */; };
+		264CA0712336CAAB00C4293B /* FluxStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0702336CAAB00C4293B /* FluxStore.swift */; };
+		264CA0732336D46E00C4293B /* FluxActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0722336D46E00C4293B /* FluxActions.swift */; };
+		264CA0752336DB5500C4293B /* FavButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0742336DB5500C4293B /* FavButton.swift */; };
+		264CA0782336E1B500C4293B /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0772336E1B500C4293B /* FavoritesService.swift */; };
+		264CA07A2336E58300C4293B /* MoviesCollectionView+Favs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0792336E58300C4293B /* MoviesCollectionView+Favs.swift */; };
 		780905D66E067185568E8365 /* Pods_CIE_DEMO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 186EFE981BF4F6F9F3111C91 /* Pods_CIE_DEMO.framework */; };
 		8528DBC5CCFA36B0DBEC338E /* Pods_CIE_DEMOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F22F5E72A2E0E5F96BBAD91 /* Pods_CIE_DEMOTests.framework */; };
 /* End PBXBuildFile section */
@@ -73,6 +78,11 @@
 		264CA0672336B11B00C4293B /* PosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterView.swift; sourceTree = "<group>"; };
 		264CA0692336B12300C4293B /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		264CA06D2336B42000C4293B /* RouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterService.swift; sourceTree = "<group>"; };
+		264CA0702336CAAB00C4293B /* FluxStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluxStore.swift; sourceTree = "<group>"; };
+		264CA0722336D46E00C4293B /* FluxActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluxActions.swift; sourceTree = "<group>"; };
+		264CA0742336DB5500C4293B /* FavButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavButton.swift; sourceTree = "<group>"; };
+		264CA0772336E1B500C4293B /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
+		264CA0792336E58300C4293B /* MoviesCollectionView+Favs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoviesCollectionView+Favs.swift"; sourceTree = "<group>"; };
 		51912EBEA85B301A2416926D /* Pods-CIE-DEMOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.debug.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		86793FEEB88497ACD623067A /* Pods-CIE-DEMO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMO.debug.xcconfig"; path = "Target Support Files/Pods-CIE-DEMO/Pods-CIE-DEMO.debug.xcconfig"; sourceTree = "<group>"; };
 		96858EE39918FB89FE747F96 /* Pods-CIE-DEMO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMO.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMO/Pods-CIE-DEMO.release.xcconfig"; sourceTree = "<group>"; };
@@ -161,6 +171,8 @@
 		264CA0452336AFCC00C4293B /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				264CA0762336E1A600C4293B /* Favorites */,
+				264CA06F2336CA9700C4293B /* Flux */,
 				264CA06C2336B41500C4293B /* Router */,
 				264CA04B2336AFFB00C4293B /* API */,
 				264CA04A2336AFF600C4293B /* Theme */,
@@ -200,9 +212,11 @@
 			isa = PBXGroup;
 			children = (
 				264CA0632336B0FC00C4293B /* MoviesCollectionView.swift */,
+				264CA0792336E58300C4293B /* MoviesCollectionView+Favs.swift */,
 				264CA0652336B10D00C4293B /* MovieViewCell.swift */,
 				264CA0672336B11B00C4293B /* PosterView.swift */,
 				264CA0692336B12300C4293B /* RatingView.swift */,
+				264CA0742336DB5500C4293B /* FavButton.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -226,6 +240,23 @@
 				264CA06D2336B42000C4293B /* RouterService.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		264CA06F2336CA9700C4293B /* Flux */ = {
+			isa = PBXGroup;
+			children = (
+				264CA0702336CAAB00C4293B /* FluxStore.swift */,
+				264CA0722336D46E00C4293B /* FluxActions.swift */,
+			);
+			path = Flux;
+			sourceTree = "<group>";
+		};
+		264CA0762336E1A600C4293B /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				264CA0772336E1B500C4293B /* FavoritesService.swift */,
+			);
+			path = Favorites;
 			sourceTree = "<group>";
 		};
 		AF63A5EFD4E574A2D8C5458F /* Frameworks */ = {
@@ -440,14 +471,19 @@
 				264CA0582336B07900C4293B /* BaseViewController.swift in Sources */,
 				264CA0642336B0FC00C4293B /* MoviesCollectionView.swift in Sources */,
 				264CA0492336AFED00C4293B /* Services.swift in Sources */,
+				264CA07A2336E58300C4293B /* MoviesCollectionView+Favs.swift in Sources */,
+				264CA0752336DB5500C4293B /* FavButton.swift in Sources */,
 				264CA0622336B0C400C4293B /* ImageViewController.swift in Sources */,
 				264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */,
 				264CA0512336B03600C4293B /* APIEndpoints.swift in Sources */,
+				264CA0732336D46E00C4293B /* FluxActions.swift in Sources */,
 				264CA0432336AFAC00C4293B /* UIColor+Extras.swift in Sources */,
 				264CA04D2336B00700C4293B /* ThemeService.swift in Sources */,
 				264CA04F2336B01000C4293B /* APIService.swift in Sources */,
 				264CA0602336B0B700C4293B /* DetailViewController.swift in Sources */,
+				264CA0712336CAAB00C4293B /* FluxStore.swift in Sources */,
 				264CA05C2336B09900C4293B /* HomeViewController.swift in Sources */,
+				264CA0782336E1B500C4293B /* FavoritesService.swift in Sources */,
 				264CA0472336AFD700C4293B /* Movie.swift in Sources */,
 				264CA06E2336B42000C4293B /* RouterService.swift in Sources */,
 				264CA0662336B10D00C4293B /* MovieViewCell.swift in Sources */,

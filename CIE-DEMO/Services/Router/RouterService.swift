@@ -32,6 +32,7 @@ class RouterService: NSObject {
     public func initTab(){
         
         tabController = UITabBarController()
+        tabController.tabBar.tintColor = .black
         
         homeRootController =  HomeViewController()
         favoritesRootController = FavoritesViewController()
@@ -76,7 +77,7 @@ extension RouterService {
         
             let detail = DetailViewController()
             detail.setupWith(movie: movie)
-            
+           
             navController.pushViewController(detail, animated: true)
             
             

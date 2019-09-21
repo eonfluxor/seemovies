@@ -13,5 +13,6 @@ class Services {
     static let router = RouterService()
     static let api = APIService()
     static let theme = ThemeService.self
-    
+    static let flux = fluxStore
+    static let favs = FavoritesService()
 }

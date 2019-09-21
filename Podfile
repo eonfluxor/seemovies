@@ -13,6 +13,8 @@ target 'CIE-DEMO' do
     pod "AlamofireObjectMapper", "~> 5.2"
     pod 'AlamofireImage', '~> 3.5'
     pod 'PINRemoteImage', '3.0.0-beta.14'
+    pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
+    pod 'ReSwift', '~> 5.0'
 
     target 'CIE-DEMOTests' do
         inherit! :search_paths

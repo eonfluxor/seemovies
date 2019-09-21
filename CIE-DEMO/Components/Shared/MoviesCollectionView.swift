@@ -23,13 +23,15 @@ class MoviesCollectionView: UIView {
     let PADDING : Int = 8
     
     var collectionView: UICollectionView!
+    var refreshControl : UIRefreshControl!
     weak var delegate :MoviesCollectionViewProtocol?
     
     var movies: [Movie] = []
     
     func setupWithFrame(frame:CGRect){
-        self.frame = frame;
-        setupCollectionView();
+        self.frame = frame
+        setupCollectionView()
+        setupPullToRefresh()
     }
     
     func setupCollectionView(){
@@ -42,7 +44,7 @@ class MoviesCollectionView: UIView {
         
         collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: "MovieCell")
         
-        self.addSubview(collectionView)
+        addSubview(collectionView)
         
         collectionView.snp_makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -51,20 +53,32 @@ class MoviesCollectionView: UIView {
         
         self.collectionView = collectionView
         
-        
     }
-}
-
-extension MoviesCollectionView {
+    
+    func setupPullToRefresh(){
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+            #selector(self.handleRefresh),for: .valueChanged)
+   
+        collectionView.addSubview(refreshControl)
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        loadMovies()
+    }
     
     func loadMovies(){
         
         Services.api.getMoviesList { [weak self] (movies) in
+            self?.refreshControl.endRefreshing()
             self?.movies = movies
             self?.collectionView.reloadData()
         }
     }
 }
+
+
 
 extension MoviesCollectionView: UICollectionViewDataSource {
     

@@ -13,6 +13,9 @@ class MovieViewCell: UICollectionViewCell {
     
     let PADDING : CGFloat = 16.0
     
+    //refs
+    var movie : Movie?
+    
     //containers
     var imageContainer : UIView!
     var descContainer : UIView!
@@ -22,7 +25,7 @@ class MovieViewCell: UICollectionViewCell {
     var titleLabel : UILabel!
     var separator : UIView!
     var descLabel : UILabel!
-    var unfavLabel : UILabel!
+    var favButton : FavButton!
     var ratingDisplay : RatingView!
     
     //poster
@@ -32,9 +35,10 @@ class MovieViewCell: UICollectionViewCell {
         
         super.init(frame: frame)
         
-        setupContainers();
-        setupDescriptionViews();
+        setupContainers()
+        setupDescriptionViews()
         setupImageDisplay()
+        setupActions()
     }
     
     
@@ -71,6 +75,11 @@ class MovieViewCell: UICollectionViewCell {
 extension MovieViewCell{
     
     func setupWithMovie(_ movie: Movie){
+        
+        favButton.setupWith(movie: movie)
+        
+        self.movie = movie
+        
         titleLabel.text = movie.title
         descLabel.text = movie.description
         dateLabel.text = movie.release_date_string
@@ -141,7 +150,7 @@ extension MovieViewCell{
         titleLabel = UILabel()
         separator = UIView()
         descLabel = UILabel()
-        unfavLabel = UILabel()
+        favButton = FavButton()
         ratingDisplay = RatingView()
         
         descContainer.addSubview(dateLabel)
@@ -149,7 +158,7 @@ extension MovieViewCell{
         descContainer.addSubview(separator)
         descContainer.addSubview(descLabel)
         descContainer.addSubview(ratingDisplay)
-        descContainer.addSubview(unfavLabel)
+        descContainer.addSubview(favButton)
         
         
         dateLabel.textColor = Services.theme.SECONDARY_COLOR
@@ -168,13 +177,6 @@ extension MovieViewCell{
         descLabel.font =  Services.theme.DEFAULT_FONT
         descLabel.numberOfLines = 2
         
-        let attributedText = NSMutableAttributedString(string: "Remove From Favorites")
-        attributedText.addAttributes(Services.theme.LINK_ATTRIBUTES, range: NSMakeRange(0, attributedText.length))
-        
-        
-        unfavLabel.numberOfLines = 2
-        unfavLabel.attributedText = attributedText
-        unfavLabel.textAlignment = .right
         
         separator.backgroundColor = Services.theme.DARK_GREY
         
@@ -209,17 +211,33 @@ extension MovieViewCell{
             make.height.greaterThanOrEqualTo(42)
         }
         
-        unfavLabel.snp_makeConstraints { (make) in
+        favButton.snp_makeConstraints { (make) in
+            make.left.equalTo(PADDING*6)
             make.top.equalTo(ratingDisplay.snp_bottom)
-            make.width.equalToSuperview()
+            make.width.equalToSuperview().inset(PADDING*3)
             make.height.lessThanOrEqualTo(60)
         }
         
         
     }
     
-    
-    @objc func unfav(){
+    func setupActions(){
         
+        favButton.didTapAdd = {
+            guard let movie = self.movie else {
+                return
+            }
+            Services.flux.dispatch(FluxAction.addFavorite(movie))
+        }
+        
+        favButton.didTapRemove = {
+            guard let movie = self.movie else {
+                return
+            }
+            Services.flux.dispatch(FluxAction.removeFavorite(movie))
+        }
     }
+    
+    
+    
 }
