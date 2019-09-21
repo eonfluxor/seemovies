@@ -14,7 +14,7 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = nil
         view.backgroundColor = Services.theme.LIGHT_GREY
-        
+        view.clipsToBounds = true
         // Do any additional setup after loading the view, typically from a nib.
     }
     

@@ -10,7 +10,7 @@ import UIKit
 import AlamofireImage
 
 class Services {
-//    static let router = MyFlaskNav()
+    static let router = RouterService()
     static let api = APIService()
     static let theme = ThemeService.self
     

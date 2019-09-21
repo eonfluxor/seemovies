@@ -3,14 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA01F2336AF4300C4293B /* AppDelegate.swift */; };
-		264CA0222336AF4300C4293B /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0212336AF4300C4293B /* FirstViewController.swift */; };
-		264CA0242336AF4300C4293B /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0232336AF4300C4293B /* SecondViewController.swift */; };
-		264CA0272336AF4300C4293B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 264CA0252336AF4300C4293B /* Main.storyboard */; };
 		264CA0292336AF4400C4293B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264CA0282336AF4400C4293B /* Assets.xcassets */; };
 		264CA02C2336AF4400C4293B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 264CA02A2336AF4400C4293B /* LaunchScreen.storyboard */; };
 		264CA0372336AF4400C4293B /* CIE_DEMOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0362336AF4400C4293B /* CIE_DEMOTests.swift */; };
@@ -31,6 +28,7 @@
 		264CA0662336B10D00C4293B /* MovieViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0652336B10D00C4293B /* MovieViewCell.swift */; };
 		264CA0682336B11B00C4293B /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0672336B11B00C4293B /* PosterView.swift */; };
 		264CA06A2336B12300C4293B /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0692336B12300C4293B /* RatingView.swift */; };
+		264CA06E2336B42000C4293B /* RouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA06D2336B42000C4293B /* RouterService.swift */; };
 		780905D66E067185568E8365 /* Pods_CIE_DEMO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 186EFE981BF4F6F9F3111C91 /* Pods_CIE_DEMO.framework */; };
 		8528DBC5CCFA36B0DBEC338E /* Pods_CIE_DEMOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F22F5E72A2E0E5F96BBAD91 /* Pods_CIE_DEMOTests.framework */; };
 /* End PBXBuildFile section */
@@ -51,9 +49,6 @@
 		258853681545C6C79163C2C8 /* Pods-CIE-DEMOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.release.xcconfig"; sourceTree = "<group>"; };
 		264CA01C2336AF4300C4293B /* CIE-DEMO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CIE-DEMO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264CA01F2336AF4300C4293B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		264CA0212336AF4300C4293B /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		264CA0232336AF4300C4293B /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
-		264CA0262336AF4300C4293B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		264CA0282336AF4400C4293B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		264CA02B2336AF4400C4293B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		264CA02D2336AF4400C4293B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -77,6 +72,7 @@
 		264CA0652336B10D00C4293B /* MovieViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewCell.swift; sourceTree = "<group>"; };
 		264CA0672336B11B00C4293B /* PosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterView.swift; sourceTree = "<group>"; };
 		264CA0692336B12300C4293B /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		264CA06D2336B42000C4293B /* RouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterService.swift; sourceTree = "<group>"; };
 		51912EBEA85B301A2416926D /* Pods-CIE-DEMOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.debug.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		86793FEEB88497ACD623067A /* Pods-CIE-DEMO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMO.debug.xcconfig"; path = "Target Support Files/Pods-CIE-DEMO/Pods-CIE-DEMO.debug.xcconfig"; sourceTree = "<group>"; };
 		96858EE39918FB89FE747F96 /* Pods-CIE-DEMO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMO.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMO/Pods-CIE-DEMO.release.xcconfig"; sourceTree = "<group>"; };
@@ -130,9 +126,6 @@
 				264CA0442336AFC600C4293B /* Models */,
 				264CA0412336AFA000C4293B /* Extensions */,
 				264CA01F2336AF4300C4293B /* AppDelegate.swift */,
-				264CA0212336AF4300C4293B /* FirstViewController.swift */,
-				264CA0232336AF4300C4293B /* SecondViewController.swift */,
-				264CA0252336AF4300C4293B /* Main.storyboard */,
 				264CA0282336AF4400C4293B /* Assets.xcassets */,
 				264CA02A2336AF4400C4293B /* LaunchScreen.storyboard */,
 				264CA02D2336AF4400C4293B /* Info.plist */,
@@ -168,6 +161,7 @@
 		264CA0452336AFCC00C4293B /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				264CA06C2336B41500C4293B /* Router */,
 				264CA04B2336AFFB00C4293B /* API */,
 				264CA04A2336AFF600C4293B /* Theme */,
 				264CA0482336AFED00C4293B /* Services.swift */,
@@ -226,6 +220,14 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		264CA06C2336B41500C4293B /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				264CA06D2336B42000C4293B /* RouterService.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
 		AF63A5EFD4E574A2D8C5458F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,7 +245,6 @@
 				51912EBEA85B301A2416926D /* Pods-CIE-DEMOTests.debug.xcconfig */,
 				258853681545C6C79163C2C8 /* Pods-CIE-DEMOTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -334,7 +335,6 @@
 			files = (
 				264CA02C2336AF4400C4293B /* LaunchScreen.storyboard in Resources */,
 				264CA0292336AF4400C4293B /* Assets.xcassets in Resources */,
-				264CA0272336AF4300C4293B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +433,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				264CA0242336AF4300C4293B /* SecondViewController.swift in Sources */,
 				264CA0532336B03E00C4293B /* APIResponses.swift in Sources */,
 				264CA05E2336B0A800C4293B /* FavoritesViewController.swift in Sources */,
 				264CA06A2336B12300C4293B /* RatingView.swift in Sources */,
@@ -445,12 +444,12 @@
 				264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */,
 				264CA0512336B03600C4293B /* APIEndpoints.swift in Sources */,
 				264CA0432336AFAC00C4293B /* UIColor+Extras.swift in Sources */,
-				264CA0222336AF4300C4293B /* FirstViewController.swift in Sources */,
 				264CA04D2336B00700C4293B /* ThemeService.swift in Sources */,
 				264CA04F2336B01000C4293B /* APIService.swift in Sources */,
 				264CA0602336B0B700C4293B /* DetailViewController.swift in Sources */,
 				264CA05C2336B09900C4293B /* HomeViewController.swift in Sources */,
 				264CA0472336AFD700C4293B /* Movie.swift in Sources */,
+				264CA06E2336B42000C4293B /* RouterService.swift in Sources */,
 				264CA0662336B10D00C4293B /* MovieViewCell.swift in Sources */,
 				264CA0682336B11B00C4293B /* PosterView.swift in Sources */,
 			);
@@ -475,14 +474,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		264CA0252336AF4300C4293B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				264CA0262336AF4300C4293B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		264CA02A2336AF4400C4293B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

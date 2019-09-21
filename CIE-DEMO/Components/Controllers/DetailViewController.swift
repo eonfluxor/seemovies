@@ -9,7 +9,7 @@
 import UIKit
 import PINRemoteImage
 
-class DetailViewController: UIViewController {
+class DetailViewController: BaseViewController {
     
     
     let POSTER_SIZE = 200.0
@@ -37,49 +37,33 @@ class DetailViewController: UIViewController {
     var similarLabel : UILabel!
     
     override func viewDidLoad() {
+        
+        super.viewDidLoad()
         setupContainers()
         setupInfo()
-        
-        
+        displayEmtpyInfo()
+        displayInfo()
     }
     
-    func setupEmptyState() {
-        
-        
-        self.view.backgroundColor = Services.theme.LIGHT_GREY
-        self.navigationItem.title = "Movie Detail"
-        
-        // TODO get movie from state
-//        if let mov = navInfo?.params?["movie"]! as! Movie? {
-//            movie = mov
-//        }
-        
-        DispatchQueue.main.async {
-            self.displayEmtpyInfo()
-        }
-        
-        
-        
-    }
-    
-    func setupContent() {
-        
-        let textAttributes = [NSAttributedString.Key.foregroundColor: Services.theme.WHITE]
-        navigationController?.navigationBar.titleTextAttributes = textAttributes
-        navigationController?.navigationBar.tintColor = Services.theme.WHITE
-        
-        
-        DispatchQueue.main.async {
-            self.displayInfo()
-        }
-        
-//        completionHandle()
-    }
-    
+  
     
 }
 
 extension DetailViewController {
+    func setupWith(movie: Movie){
+        self.movie = movie
+    }
+}
+
+extension DetailViewController {
+    
+    func setupNavStyle(){
+        navigationItem.title = "Movie Detail"
+        let textAttributes = [NSAttributedString.Key.foregroundColor: Services.theme.WHITE]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+        navigationController?.navigationBar.tintColor = Services.theme.WHITE
+        
+    }
     
     func setupContainers(){
         

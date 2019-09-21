@@ -12,22 +12,14 @@ import Delayed
 class HomeViewController: BaseViewController  {
     
     var list : MoviesCollectionView!
-    var presentingDetail : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         setupCollectionView();
         reloadData();
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        presentingDetail = false
-    }
-    
-    
-    
+
 }
 
 extension HomeViewController{
@@ -60,11 +52,11 @@ extension HomeViewController: MoviesCollectionViewProtocol{
     
     func didSelectMovie(_ movie:Movie) {
         
-        if(self.presentingDetail){ return; }
-        self.presentingDetail = true
         
-//        let detailAnimator = NavAnimators.ZoomOut()
-//        Services.router.tab(.Home).push(controller: .MovieDetail, info:NavInfo(params:["movie":movie]), animator:detailAnimator)
+        
+        Services.router.pushDetailViewController(movie: movie)
+        //        let detailAnimator = NavAnimators.ZoomOut()
+        //        Services.router.tab(.Home).push(controller: .MovieDetail, info:NavInfo(params:["movie":movie]), animator:detailAnimator)
         
     }
 }
