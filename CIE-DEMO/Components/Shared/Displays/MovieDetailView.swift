@@ -20,7 +20,8 @@ class MovieDetailView: UIView {
     
     // UI containers
 
-    var backdropContainerPoster : UIImageView!
+    var headerImage : UIImageView!
+    var headerImageOverlay : UIView!
     var infoContainer : UIView!
     
     // UI elements
@@ -59,9 +60,11 @@ extension MovieDetailView {
  
     func setupContainers(){
         
-        backdropContainerPoster = UIImageView()
-        backdropContainerPoster.contentMode  = .scaleAspectFill
+        headerImage = UIImageView()
+        headerImage.contentMode  = .scaleAspectFill
         
+        headerImageOverlay = UIView()
+        headerImageOverlay.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
        
         infoContainer = UIView()
         infoContainer.backgroundColor = Services.theme.LIGHT_GREY
@@ -83,21 +86,24 @@ extension MovieDetailView {
         favoriteButton = FavButton()
         
         
-        addSubview(backdropContainerPoster)
+        addSubview(headerImage)
         addSubview(infoContainer)
         addSubview(posterShadow)
         addSubview(favoriteButton)
         posterShadow.addSubview(poster)
         posterShadow.addSubview(ratingDisplay)
+        headerImage.addSubview(headerImageOverlay)
         
-        
-        backdropContainerPoster.snp_makeConstraints { (make) in
-            
+        headerImage.snp_makeConstraints { (make) in
             make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.4)
+            make.height.equalToSuperview().multipliedBy(0.5)
         }
         
-     
+        headerImageOverlay.snp_makeConstraints { (make) in
+            make.edges.equalToSuperview()
+            make.center.equalToSuperview()
+        }
+        
         
         infoContainer.snp_makeConstraints { (make) in
             make.width.equalToSuperview()
@@ -145,6 +151,8 @@ extension MovieDetailView {
         titleLabel.textAlignment = .center
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
+     
+
         
         genreLabel = UILabel()
         genreLabel.textColor = Services.theme.LIGHT_GREY
@@ -202,11 +210,7 @@ extension MovieDetailView {
             make.top.equalTo((POSTER_SIZE / 2.0) + Double(PADDING))
             make.height.greaterThanOrEqualTo(80)
         }
-        
-      
-        
     }
-    
     
 }
 
@@ -214,19 +218,13 @@ extension MovieDetailView {
 extension MovieDetailView {
     
     func displayCachedInfo(){
-        if let url =  URL(string:movie.poster_url!) {
-            backdropContainerPoster.af_setImage(
-                withURL: url,
-                placeholderImage: nil,
-                filter: nil,
-                imageTransition: .crossDissolve(0.5),
-                completion: { [weak self] response in
-                    
-                    if let image = response.value {
-                        self?.displayOptimalTitleColor(image:image)
-                    }
-                    
-            })
+        if let url =  URL(string:movie.back_url!) {
+            headerImage.af_setImage(withURL: url)
+            headerImage.transform = CGAffineTransform.identity
+            UIView.animate(withDuration: 30) {
+                self.headerImage.transform = CGAffineTransform(scaleX: 2, y: 2)
+            }
+            
         }
         
         if let url =  movie.poster_url {
@@ -245,24 +243,6 @@ extension MovieDetailView {
     }
 }
 
-extension MovieDetailView  {
-    
-    func displayOptimalTitleColor(image : UIImage){
-        
-        DispatchQueue.main.async {
-            self.titleLabel.textColor = self.constrastingImageColor(image : image)
-            self.genreLabel.textColor = self.constrastingImageColor(image : image)
-        }
-        
-    }
-    
-    func constrastingImageColor(image : UIImage) -> UIColor{
-        
-        let color = AverageColorFromImage( image)
-        let result = UIColor(contrastingBlackOrWhiteColorOn:color, isFlat:false)
-        return result
-    }
-}
 
 extension MovieDetailView {
     
