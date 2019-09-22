@@ -291,9 +291,9 @@
 			isa = PBXGroup;
 			children = (
 				264CA0652336B10D00C4293B /* MovieViewCell.swift */,
+				26F948A32337E05A0092E27E /* DisplayGenericCell.swift */,
 				26F9489923370CF50092E27E /* MovieDetailCellView.swift */,
 				26F9489F233714830092E27E /* SimilarMoviesCell.swift */,
-				26F948A32337E05A0092E27E /* DisplayGenericCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";

@@ -14,6 +14,7 @@ class SimilarMoviesCell:  DisplayGenericCell<SimilarMoviesView> {
     
     func setupWith(movie: Movie){
         self.movie = movie
-//        displayView.setupWith(movie: movie)
+        displayView.setupWith(movie : movie)
+        displayView.loadMovies()
     }
 }

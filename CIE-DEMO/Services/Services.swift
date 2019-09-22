@@ -9,6 +9,8 @@
 import UIKit
 import AlamofireImage
 
+typealias MovieSelectionClosure = (Movie)->Void
+
 class Services {
     static let router = RouterService()
     static let api = APIService()

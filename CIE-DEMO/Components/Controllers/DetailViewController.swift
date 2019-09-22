@@ -108,9 +108,10 @@ extension DetailViewController: UICollectionViewDataSource {
             
         } else if indexPath.section == 1 {
            
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SIMILAR_CELL, for: indexPath) as! SimilarMoviesCell
-           
+            if let movie = movie {
+                cell.setupWith(movie: movie)
+            }
             return cell
         }
         
@@ -124,8 +125,6 @@ extension DetailViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-//        let movie = movies[indexPath.row]
-//        delegate?.didSelectMovie(movie)
     }
 }
 
@@ -140,7 +139,7 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
         var height = 600
         
         if(indexPath.section == 1){
-            height = 500
+            height = Services.theme.CELLS_HEIGHT + 80
         }
         
         return CGSize( width: width , height: height )

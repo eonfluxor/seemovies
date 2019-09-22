@@ -9,16 +9,14 @@
 import UIKit
 
 
-//typealias MoviesCollectionViewSelection = ()->Void
-
+// NOTE: I am not a big fan of the protocol / delegate pattern.
+// The same can be accomplished with a public closure.
+// There is a sample of this in the SimilarMoviesView
 protocol MoviesCollectionViewProtocol:AnyObject {
-    
     func didSelectMovie(_ movie : Movie) //todo pass selected index and/or object
 }
 
-
 class MoviesCollectionView: UIView {
-    
     
     let PADDING : Int = 8
     
@@ -27,6 +25,9 @@ class MoviesCollectionView: UIView {
     weak var delegate :MoviesCollectionViewProtocol?
     
     var movies: [Movie] = []
+}
+
+extension MoviesCollectionView {
     
     func setup(){
         setupCollectionView()
@@ -59,15 +60,19 @@ class MoviesCollectionView: UIView {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action:
             #selector(self.handleRefresh),for: .valueChanged)
-   
+        
         collectionView.addSubview(refreshControl)
     }
+    
+}
+
+extension MoviesCollectionView {
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         loadMovies()
     }
     
-    func loadMovies(){
+    @objc func loadMovies(){
         
         Services.api.getMoviesList { [weak self] (movies) in
             self?.refreshControl.endRefreshing()
