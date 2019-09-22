@@ -43,7 +43,6 @@ class DetailViewController: BaseViewController {
     }
     
     func setupNavStyle(){
-        navigationItem.title = "Movie Detail"
         let textAttributes = [NSAttributedString.Key.foregroundColor: Services.theme.WHITE]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         navigationController?.navigationBar.tintColor = Services.theme.WHITE
