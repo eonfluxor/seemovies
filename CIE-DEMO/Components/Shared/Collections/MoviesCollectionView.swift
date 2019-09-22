@@ -13,7 +13,7 @@ import UIKit
 // The same can be accomplished with a public closure.
 // There is a sample of this in the SimilarMoviesView
 protocol MoviesCollectionViewProtocol:AnyObject {
-    func didSelectMovie(_ movie : Movie) //todo pass selected index and/or object
+    func didSelect(movie : Movie) //todo pass selected index and/or object
 }
 
 class MoviesCollectionView: UIView {
@@ -109,7 +109,7 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let movie = movies[indexPath.row]
-        delegate?.didSelectMovie(movie)
+        delegate?.didSelect(movie: movie)
     }
 }
 

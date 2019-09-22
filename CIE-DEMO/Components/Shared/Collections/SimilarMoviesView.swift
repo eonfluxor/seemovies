@@ -17,7 +17,7 @@ class SimilarMoviesView: UIView {
     var collectionView: UICollectionView!
     
     // PIPELINE
-    var didSelectMovie : MovieClosure?
+    var didSelect : MovieClosure?
     var movies: [Movie] = []
     var movie : Movie!
     
@@ -124,7 +124,7 @@ extension SimilarMoviesView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let movie = movies[indexPath.row]
-        didSelectMovie?(movie)
+        didSelect?(movie)
     }
 }
 

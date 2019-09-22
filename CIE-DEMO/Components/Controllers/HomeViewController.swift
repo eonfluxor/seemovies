@@ -64,8 +64,10 @@ extension HomeViewController{
 }
 
 extension HomeViewController: MoviesCollectionViewProtocol{
+  
     
-    func didSelectMovie(_ movie:Movie) {
+    
+    func didSelect( movie:Movie) {
         Services.router.pushDetailViewController(movie: movie)
         //        let detailAnimator = NavAnimators.ZoomOut()
         //        Services.router.tab(.Home).push(controller: .MovieDetail, info:NavInfo(params:["movie":movie]), animator:detailAnimator)

@@ -82,7 +82,12 @@ extension DetailViewController {
     }
 }
 
-
+extension DetailViewController {
+    
+    func didSelect(movie : Movie){
+        Services.router.pushDetailViewController(movie: movie)
+    }
+}
 
 
 extension DetailViewController: UICollectionViewDataSource {
@@ -112,6 +117,11 @@ extension DetailViewController: UICollectionViewDataSource {
             if let movie = movie {
                 cell.setupWith(movie: movie)
             }
+            
+            cell.displayView.didSelect = { movie in
+                self.didSelect(movie : movie)
+            }
+            
             return cell
         }
         
