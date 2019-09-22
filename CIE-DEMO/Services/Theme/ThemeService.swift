@@ -12,7 +12,6 @@ class ThemeService: NSObject {
     
     
     static let CELLS_HEIGHT = 222
-    static let HEADER_HEIGHT = 333
     static let FONT_FAMILY = "HelveticaNeue"
     
     static let H1_FONT = UIFont(name: "\(FONT_FAMILY)-Bold", size: 22)
