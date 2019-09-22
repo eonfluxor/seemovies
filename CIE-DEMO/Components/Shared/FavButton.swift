@@ -14,7 +14,7 @@ class FavButton: UIView {
     
     var movie : Movie!
     var label : UILabel!
-   
+
     
     override init(frame: CGRect) {
         

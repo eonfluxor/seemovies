@@ -38,6 +38,7 @@
 		264CA07E2336F08F00C4293B /* FluxPersist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA07D2336F08F00C4293B /* FluxPersist.swift */; };
 		264CA0802336F0F900C4293B /* FluxState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA07F2336F0F900C4293B /* FluxState.swift */; };
 		264CA0832336F4D000C4293B /* CodableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA0822336F4D000C4293B /* CodableService.swift */; };
+		26F94898233709870092E27E /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F94897233709870092E27E /* MovieDetailView.swift */; };
 		780905D66E067185568E8365 /* Pods_CIE_DEMO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 186EFE981BF4F6F9F3111C91 /* Pods_CIE_DEMO.framework */; };
 		8528DBC5CCFA36B0DBEC338E /* Pods_CIE_DEMOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F22F5E72A2E0E5F96BBAD91 /* Pods_CIE_DEMOTests.framework */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		264CA07D2336F08F00C4293B /* FluxPersist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluxPersist.swift; sourceTree = "<group>"; };
 		264CA07F2336F0F900C4293B /* FluxState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluxState.swift; sourceTree = "<group>"; };
 		264CA0822336F4D000C4293B /* CodableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableService.swift; sourceTree = "<group>"; };
+		26F94897233709870092E27E /* MovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailView.swift; sourceTree = "<group>"; };
 		51912EBEA85B301A2416926D /* Pods-CIE-DEMOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.debug.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		86793FEEB88497ACD623067A /* Pods-CIE-DEMO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMO.debug.xcconfig"; path = "Target Support Files/Pods-CIE-DEMO/Pods-CIE-DEMO.debug.xcconfig"; sourceTree = "<group>"; };
 		96858EE39918FB89FE747F96 /* Pods-CIE-DEMO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMO.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMO/Pods-CIE-DEMO.release.xcconfig"; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				264CA0672336B11B00C4293B /* PosterView.swift */,
 				264CA0692336B12300C4293B /* RatingView.swift */,
 				264CA0742336DB5500C4293B /* FavButton.swift */,
+				26F94897233709870092E27E /* MovieDetailView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -487,6 +490,7 @@
 				264CA0532336B03E00C4293B /* APIResponses.swift in Sources */,
 				264CA05E2336B0A800C4293B /* FavoritesViewController.swift in Sources */,
 				264CA06A2336B12300C4293B /* RatingView.swift in Sources */,
+				26F94898233709870092E27E /* MovieDetailView.swift in Sources */,
 				264CA07C2336F04900C4293B /* FluxReducer.swift in Sources */,
 				264CA05A2336B08C00C4293B /* RootViewController.swift in Sources */,
 				264CA0582336B07900C4293B /* BaseViewController.swift in Sources */,
