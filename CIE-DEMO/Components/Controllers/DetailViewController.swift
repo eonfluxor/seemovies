@@ -139,7 +139,7 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
         var height = 600
         
         if(indexPath.section == 1){
-            height = Services.theme.CELLS_HEIGHT + 80
+            height = Services.theme.CELLS_HEIGHT + 100
         }
         
         return CGSize( width: width , height: height )

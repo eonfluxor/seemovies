@@ -17,7 +17,7 @@ class SimilarMoviesView: UIView {
     var collectionView: UICollectionView!
     
     // PIPELINE
-    var didSelectMovie : MovieSelectionClosure?
+    var didSelectMovie : MovieClosure?
     var movies: [Movie] = []
     
     override init(frame: CGRect) {

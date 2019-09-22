@@ -10,7 +10,7 @@ import UIKit
 import ChameleonFramework
 
 class MovieDetailView: UIView {
-
+    
     let POSTER_SIZE = 200.0
     let PADDING = Services.theme.PADDING
     
@@ -19,7 +19,7 @@ class MovieDetailView: UIView {
     var movie: Movie!
     
     // UI containers
-
+    
     var headerImage : UIImageView!
     var headerImageOverlay : UIView!
     var infoContainer : UIView!
@@ -30,12 +30,12 @@ class MovieDetailView: UIView {
     var posterShadow : UIView!
     var titleLabel  : UILabel!
     var genreLabel : UILabel!
-    var headingLabel : UILabel!
+    var taglineLabel : UILabel!
     var ratingDisplay : RatingView!
     var overviewLabel : UILabel!
     var favoriteButton : FavButton!
     
- 
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContainers()
@@ -57,7 +57,7 @@ extension MovieDetailView {
 
 extension MovieDetailView {
     
- 
+    
     func setupContainers(){
         
         headerImage = UIImageView()
@@ -65,7 +65,7 @@ extension MovieDetailView {
         
         headerImageOverlay = UIView()
         headerImageOverlay.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-       
+        
         infoContainer = UIView()
         infoContainer.backgroundColor = Services.theme.LIGHT_GREY
         
@@ -148,7 +148,7 @@ extension MovieDetailView {
         titleLabel.textAlignment = .center
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
-     
+        
         genreLabel = UILabel()
         genreLabel.textColor = Services.theme.LIGHT_GREY
         genreLabel.text = "Drama, Adventure, Science Fiction"
@@ -157,12 +157,12 @@ extension MovieDetailView {
         genreLabel.adjustsFontSizeToFitWidth = true
         genreLabel.minimumScaleFactor = 0.5
         
-        headingLabel = UILabel()
-        headingLabel.textColor = Services.theme.PRIMARY_COLOR
-        headingLabel.text = "Bring Him Home"
-        headingLabel.font =  Services.theme.H2_FONT
-        headingLabel.adjustsFontSizeToFitWidth = true
-        headingLabel.minimumScaleFactor = 0.5
+        taglineLabel = UILabel()
+        taglineLabel.textColor = Services.theme.PRIMARY_COLOR
+        taglineLabel.text = "Bring Him Home"
+        taglineLabel.font =  Services.theme.H2_FONT
+        taglineLabel.adjustsFontSizeToFitWidth = true
+        taglineLabel.minimumScaleFactor = 0.5
         
         overviewLabel = UILabel()
         overviewLabel.textColor = Services.theme.PRIMARY_COLOR
@@ -189,18 +189,18 @@ extension MovieDetailView {
             make.height.lessThanOrEqualTo(30)
         }
         
-        infoContainer.addSubview(headingLabel)
+        infoContainer.addSubview(taglineLabel)
         infoContainer.addSubview(overviewLabel)
         
-        headingLabel.snp_makeConstraints { (make) in
+        taglineLabel.snp_makeConstraints { (make) in
             make.width.equalTo(titleLabel)
             make.height.lessThanOrEqualTo(30)
             make.left.equalTo(posterShadow.snp_right).offset(PADDING)
-            make.top.equalTo(PADDING)
+            make.top.equalTo(PADDING/2)
         }
         
         overviewLabel.snp_makeConstraints { (make) in
-           
+            
             make.left.equalTo(self.snp_leftMargin).offset(PADDING)
             make.right.equalTo(self.snp_rightMargin).inset(PADDING)
             make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
@@ -235,7 +235,23 @@ extension MovieDetailView {
     func displayExtraInfo(){
         
         favoriteButton.setupWith(movie: movie)
- 
+        
+        getExtraInfo { (movie) in
+            self.genreLabel.text = movie.genresTitle()
+            self.taglineLabel.text = movie.tagline ?? movie.title
+        }
+        
+    }
+    
+    func getExtraInfo(completion : @escaping MovieClosure )->Void{
+        
+        guard let mid = movie.id else {
+            return
+        }
+        
+        Services.api.get(movieId: mid) { (movie) in
+            completion(movie)
+        }
     }
 }
 

@@ -23,8 +23,5 @@ struct APIResponseMovieList: Mappable {
         results <- map["results"]
     }
     
-    
-    
-    
-    
 }
+
