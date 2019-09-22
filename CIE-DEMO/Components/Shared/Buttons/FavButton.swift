@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChameleonFramework
 
 typealias DidTapFav = ()->Void
 
@@ -87,12 +88,14 @@ extension FavButton {
         let added = Services.favs.isFav(movie: movie)
         
         if added || force == true {
-            backgroundColor = .lightGray
-            label.text = "- Favorite"
+            backgroundColor = Services.theme.LIGHT_GREY
+            label.text = "Favorite"
+            label.textColor = Services.theme.DARK_GREY
         } else if !added || force == false {
             
-            backgroundColor = .blue
+            backgroundColor = .flatOrange
             label.text = "+ Favorite"
+            label.textColor = .white
         }
     }
 }

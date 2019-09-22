@@ -1,42 +1,65 @@
 //
-//  MoviesCollectionView.swift
-//  FlaskNav
+//  SimilarMoviesView.swift
+//  CIE-DEMO
 //
-//  Created by hassan uriostegui on 9/19/19.
+//  Created by hassan uriostegui on 9/21/19.
 //  Copyright © 2019 eonflux. All rights reserved.
 //
 
 import UIKit
 
+class SimilarMoviesView: UIView {
 
-// NOTE: I am not a big fan of the protocol / delegate pattern.
-// The same can be accomplished with a public closure.
-// There is a sample of this in the SimilarMoviesView
-protocol MoviesCollectionViewProtocol:AnyObject {
-    func didSelect(movie : Movie) //todo pass selected index and/or object
-}
-
-class MoviesCollectionView: UIView {
+    let PADDING = Services.theme.PADDING
     
-    let PADDING : Int = 8
-    
+    // UI
+    var titleLabel : UILabel!
     var collectionView: UICollectionView!
-    var refreshControl : UIRefreshControl!
-    weak var delegate :MoviesCollectionViewProtocol?
     
+    // PIPELINE
+    var didSelect : MovieClosure?
     var movies: [Movie] = []
+    var movie : Movie!
+    
+    override init(frame: CGRect) {
+        
+        super.init(frame: frame)
+        backgroundColor = Services.theme.LIGHT_GREY
+        
+        titleLabel = UILabel()
+        titleLabel.textColor = Services.theme.BLACK
+        titleLabel.text = "Similar Movies"
+        titleLabel.font =  Services.theme.H1_FONT
+        titleLabel.textAlignment = .left
+        
+        addSubview(titleLabel)
+        
+        titleLabel.snp_makeConstraints { (make) in
+            make.left.equalTo(self.snp_leftMargin)
+            make.right.equalTo(self.snp_rightMargin)
+            make.height.lessThanOrEqualTo(30)
+            make.top.lessThanOrEqualTo(PADDING)
+        }
+        
+        setupCollectionView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
-extension MoviesCollectionView {
+extension SimilarMoviesView {
     
-    func setup(){
-        setupCollectionView()
-        setupPullToRefresh()
+    func setupWith(movie: Movie){
+        self.movie = movie
     }
     
     func setupCollectionView(){
         
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let layout =  UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
@@ -47,35 +70,28 @@ extension MoviesCollectionView {
         addSubview(collectionView)
         
         collectionView.snp_makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.center.equalToSuperview()
+            make.left.equalTo(0)
+            make.right.equalTo(self.snp_right)
+            make.top.equalTo(titleLabel.snp_bottom)
+            make.bottom.equalTo(self.snp_bottomMargin)
+            
         }
         
         self.collectionView = collectionView
         
     }
     
-    func setupPullToRefresh(){
-        
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action:
-            #selector(self.handleRefresh),for: .valueChanged)
-        
-        collectionView.addSubview(refreshControl)
-    }
-    
 }
 
-extension MoviesCollectionView {
-    
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        loadMovies()
-    }
-    
-    @objc func loadMovies(){
+extension SimilarMoviesView {
+    func loadMovies(){
         
-        Services.api.getMoviesList { [weak self] (movies) in
-            self?.refreshControl.endRefreshing()
+        guard let mid = movie.id else {
+            return
+        }
+        
+        Services.api.getSimilarTo(movieId: mid ) { [weak self] (movies) in
+          
             self?.movies = movies
             self?.collectionView.reloadData()
         }
@@ -83,8 +99,7 @@ extension MoviesCollectionView {
 }
 
 
-
-extension MoviesCollectionView: UICollectionViewDataSource {
+extension SimilarMoviesView: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -104,16 +119,16 @@ extension MoviesCollectionView: UICollectionViewDataSource {
     }
 }
 
-extension MoviesCollectionView: UICollectionViewDelegate {
+extension SimilarMoviesView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let movie = movies[indexPath.row]
-        delegate?.didSelect(movie: movie)
+        didSelect?(movie)
     }
 }
 
-extension MoviesCollectionView: UICollectionViewDelegateFlowLayout {
+extension SimilarMoviesView: UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView,
@@ -142,4 +157,3 @@ extension MoviesCollectionView: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets.init(top: 8, left: 8, bottom: 8, right: 8)
     }
 }
-

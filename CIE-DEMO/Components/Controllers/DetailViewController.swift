@@ -82,7 +82,12 @@ extension DetailViewController {
     }
 }
 
-
+extension DetailViewController {
+    
+    func didSelect(movie : Movie){
+        Services.router.pushDetailViewController(movie: movie)
+    }
+}
 
 
 extension DetailViewController: UICollectionViewDataSource {
@@ -108,9 +113,15 @@ extension DetailViewController: UICollectionViewDataSource {
             
         } else if indexPath.section == 1 {
            
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SIMILAR_CELL, for: indexPath) as! SimilarMoviesCell
-           
+            if let movie = movie {
+                cell.setupWith(movie: movie)
+            }
+            
+            cell.displayView.didSelect = { movie in
+                self.didSelect(movie : movie)
+            }
+            
             return cell
         }
         
@@ -124,8 +135,6 @@ extension DetailViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-//        let movie = movies[indexPath.row]
-//        delegate?.didSelectMovie(movie)
     }
 }
 
@@ -136,11 +145,11 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width = collectionView.bounds.size.width
-        var height = view.frame.height * 0.6
+        let width = Int(collectionView.bounds.size.width)
+        var height = 600
         
         if(indexPath.section == 1){
-            height = view.frame.height * 0.5
+            height = Services.theme.CELLS_HEIGHT + 100
         }
         
         return CGSize( width: width , height: height )

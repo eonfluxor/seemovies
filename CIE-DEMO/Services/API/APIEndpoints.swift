@@ -9,5 +9,17 @@
 import UIKit
 
 struct APIEndpoints {
-    static let trendingMovies = "https://api.themoviedb.org/3/trending/movie/day"
+    
+    static func trendingMovies()->String{
+        return "https://api.themoviedb.org/3/trending/movie/day"
+    }
+    
+    static func similarMovies(movieId : String)->String{
+        return "https://api.themoviedb.org/3/movie/\(movieId)/recommendations"
+    }
+    
+    static func movieInfo(movieId : String)->String{
+        return "https://api.themoviedb.org/3/movie/\(movieId)"
+    }
+
 }

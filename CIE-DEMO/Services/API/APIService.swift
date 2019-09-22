@@ -24,30 +24,42 @@ class APIService: NSObject {
     }
     
     func getMoviesList(from page:Int? = nil, _ completion:@escaping APIMovieListCompletion)->Void{
-        //make api request and map
-        
-        
-        Alamofire.request(endpoint(APIEndpoints.trendingMovies)).responseObject { (response: DataResponse<APIResponseMovieList>) in
+        Alamofire.request(endpoint(APIEndpoints.trendingMovies())).responseObject { (response: DataResponse<APIResponseMovieList>) in
             
-            let response = response.result.value
-            
+            guard let response = response.result.value else {
+                assert(false, "Unexepcted response format")
+            }
             DispatchQueue.main.async {
-                completion(response?.results ?? []);
+                completion(response.results ?? []);
+            }
+        }
+    }
+    
+    func getSimilarTo(movieId : String, _ completion:@escaping APIMovieListCompletion) {
+        Alamofire.request(endpoint(APIEndpoints.similarMovies(movieId:movieId))).responseObject { (response: DataResponse<APIResponseMovieList>) in
+            
+            guard let response = response.result.value else {
+                assert(false, "Unexepcted response format")
+            }
+            DispatchQueue.main.async {
+                completion(response.results ?? []);
+            }
+        }
+    }
+    
+    func get(movieId : String, _ completion:@escaping APIMovieCompletion) {
+        Alamofire.request(endpoint(APIEndpoints.movieInfo(movieId:movieId))).responseObject { (response: DataResponse<Movie>) in
+            
+            guard let response = response.result.value else {
+                assert(false, "Unexepcted response format")
             }
             
-            //            let weatherResponse = response.result.value
-            //            print(weatherResponse?.location)
-            //
-            //            if let threeDayForecast = weatherResponse?.threeDayForecast {
-            //                for forecast in threeDayForecast {
-            //                    print(forecast.day)
-            //                    print(forecast.temperature)
-            //                }
-            //            }
+            DispatchQueue.main.async {
+                completion(response);
+            }
         }
-        
-        
-        
     }
+    
+    
     
 }
