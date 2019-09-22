@@ -31,8 +31,11 @@ class FavoritesViewController: BaseViewController {
    
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         navigationController?.hidesBarsOnSwipe = true
-         super.viewWillAppear(animated)
+        navigationController?.navigationBar.titleTextAttributes = nil
+        navigationController?.navigationBar.tintColor = Services.theme.BLACK
         reloadData()
     }
     
@@ -51,9 +54,9 @@ extension FavoritesViewController{
     
     func setupCollectionView(){
         let list = MovieFavsCollectionView()
-        list.setupWithFrame(frame: self.view.bounds)
+        list.setup()
         list.delegate = self
-        self.view.addSubview(list)
+        view.addSubview(list)
         
         
         list.snp_makeConstraints { (make) in

@@ -136,11 +136,11 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width = collectionView.bounds.size.width
-        var height = view.frame.height * 0.6
+        let width = Int(collectionView.bounds.size.width)
+        var height = 600
         
         if(indexPath.section == 1){
-            height = view.frame.height * 0.5
+            height = 500
         }
         
         return CGSize( width: width , height: height )

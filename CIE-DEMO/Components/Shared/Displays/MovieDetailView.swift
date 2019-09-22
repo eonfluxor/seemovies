@@ -116,7 +116,7 @@ extension MovieDetailView {
             make.width.equalTo(POSTER_SIZE * 12.0/16.0)
             make.height.equalTo(POSTER_SIZE )
             make.top.equalTo(self.snp_bottom).multipliedBy(0.35)
-            make.left.equalTo(PADDING)
+            make.left.equalTo(self.snp_leftMargin).offset(PADDING)
         }
         
         poster.snp_makeConstraints { (make) in
@@ -195,13 +195,14 @@ extension MovieDetailView {
         headingLabel.snp_makeConstraints { (make) in
             make.width.equalTo(titleLabel)
             make.height.lessThanOrEqualTo(30)
-            make.left.equalTo(titleLabel)
+            make.left.equalTo(posterShadow.snp_right).offset(PADDING)
             make.top.equalTo(PADDING)
         }
         
         overviewLabel.snp_makeConstraints { (make) in
-            make.width.equalToSuperview().inset(PADDING)
-            make.left.equalTo(PADDING)
+           
+            make.left.equalTo(self.snp_leftMargin).offset(PADDING)
+            make.right.equalTo(self.snp_rightMargin).inset(PADDING)
             make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
             make.height.lessThanOrEqualTo(200)
         }

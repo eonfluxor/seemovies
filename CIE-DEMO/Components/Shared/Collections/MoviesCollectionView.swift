@@ -28,15 +28,14 @@ class MoviesCollectionView: UIView {
     
     var movies: [Movie] = []
     
-    func setupWithFrame(frame:CGRect){
-        self.frame = frame
+    func setup(){
         setupCollectionView()
         setupPullToRefresh()
     }
     
     func setupCollectionView(){
         
-        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self

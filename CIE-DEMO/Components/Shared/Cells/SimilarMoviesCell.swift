@@ -29,9 +29,9 @@ class SimilarMoviesCell: UICollectionViewCell {
         addSubview(titleLabel)
         
         titleLabel.snp_makeConstraints { (make) in
-            make.width.equalToSuperview().inset(PADDING)
+            make.left.equalTo(self.snp_leftMargin)
+            make.right.equalTo(self.snp_rightMargin)
             make.height.lessThanOrEqualTo(30)
-            make.left.equalTo(PADDING)
             make.top.lessThanOrEqualTo(PADDING)
         }
     }

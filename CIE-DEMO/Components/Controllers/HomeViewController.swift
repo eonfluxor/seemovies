@@ -22,10 +22,13 @@ class HomeViewController: BaseViewController  {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Trending"
+        
     }
     override func viewDidAppear(_ animated: Bool) {
-        navigationController?.hidesBarsOnSwipe = true
         super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnSwipe = true
+        navigationController?.navigationBar.tintColor = Services.theme.BLACK
+        navigationController?.navigationBar.titleTextAttributes = nil
         reloadData()
     }
 
@@ -35,14 +38,17 @@ extension HomeViewController{
     
     func setupCollectionView(){
         let list = MoviesCollectionView()
-        list.setupWithFrame(frame: self.view.bounds)
+        list.setup()
         list.delegate = self
-        self.view.addSubview(list)
+        
+        view.addSubview(list)
         
         
         list.snp_makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.center.equalToSuperview()
+            make.left.equalTo(view.safeAreaInsets.left)
+            make.right.equalTo(view.safeAreaInsets.right)
+            make.top.equalTo(0)
+            make.bottom.equalTo(view.snp_bottomMargin)
         }
         
         self.list = list
