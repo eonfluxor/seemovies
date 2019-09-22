@@ -59,8 +59,6 @@ class DetailViewController: BaseViewController {
         displayExtraInfo()
     }
     
-  
-    
 }
 
 extension DetailViewController {
