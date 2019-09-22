@@ -17,7 +17,6 @@ class MovieFavsCollectionView: MoviesCollectionView {
         guard let favValues = state?.favs.values else {
             return
         }
-        
        
         refreshControl.endRefreshing()
         movies = Array(favValues)
