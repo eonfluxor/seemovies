@@ -22,11 +22,20 @@ class RouterService: NSObject {
         assert(window == nil, "This instance is already setup")
         window = aWindow
         
+        styleApp()
         initTab()
         
         window.rootViewController = tabController
         window.makeKeyAndVisible()
         
+    }
+    
+    public func styleApp(){
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        // Sets shadow (line below the bar) to a blank image
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().backgroundColor = .clear
+        UINavigationBar.appearance().tintColor = .white
     }
     
     public func initTab(){
@@ -43,8 +52,6 @@ class RouterService: NSObject {
         homeNavController = UINavigationController(rootViewController:homeRootController )
         favoritesNavController = UINavigationController(rootViewController: favoritesRootController)
         
-        homeNavController.isNavigationBarHidden = true
-        favoritesNavController.isNavigationBarHidden = true
         
         tabController.viewControllers = [homeNavController,
                                          favoritesNavController]

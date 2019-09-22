@@ -12,7 +12,7 @@ import ReSwift
 
 class FavoritesViewController: BaseViewController {
     
-    typealias StoreSubscriberStateType = AppState
+    typealias StoreSubscriberStateType = FluxState
     
     var list : MovieFavsCollectionView!
     
@@ -23,7 +23,16 @@ class FavoritesViewController: BaseViewController {
         Services.flux.subscribe(self)
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "Favorites"
+    }
+   
+    
     override func viewDidAppear(_ animated: Bool) {
+        navigationController?.hidesBarsOnSwipe = true
+         super.viewWillAppear(animated)
         reloadData()
     }
     
@@ -31,7 +40,7 @@ class FavoritesViewController: BaseViewController {
 
 extension FavoritesViewController:StoreSubscriber {
     
-    func newState(state: AppState) {
+    func newState(state: FluxState) {
         // update when new elements are added
         // for a more complex app we want to observe only specific keys with subscription filtering
         reloadData()

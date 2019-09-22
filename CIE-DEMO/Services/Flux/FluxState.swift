@@ -1,5 +1,5 @@
 //
-//  FluxStore.swift
+//  FluxState.swift
 //  CIE-DEMO
 //
 //  Created by hassan uriostegui on 9/21/19.
@@ -8,7 +8,6 @@
 
 import ReSwift
 
-let fluxStore = Store(
-    reducer: FluxReducer,
-    state: FluxUnarchive(),
-    middleware: [])
+struct FluxState: StateType, Codable {
+    var favs : [String:Movie] = [:]
+}

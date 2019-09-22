@@ -15,4 +15,5 @@ class Services {
     static let theme = ThemeService.self
     static let flux = fluxStore
     static let favs = FavoritesService()
+    static let codable = CodableService()
 }

@@ -46,8 +46,15 @@ class DetailViewController: BaseViewController {
         displayCachedInfo()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+      
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        navigationController?.hidesBarsOnSwipe = false //TODO: set to true once wrapped in scrollview
+        navigationController?.setNavigationBarHidden(false, animated: true)
         displayCachedInfo()
         displayExtraInfo()
     }
@@ -201,7 +208,7 @@ extension DetailViewController {
         
         
         titleLabel.snp_makeConstraints { (make) in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin).offset(PADDING*3)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin).offset(Float(PADDING) * 2.5)
             make.left.equalTo(PADDING)
             make.right.equalTo(view).inset(PADDING)
             make.height.lessThanOrEqualTo(30)

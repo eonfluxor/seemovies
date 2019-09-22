@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-struct Movie : Mappable{
+struct Movie : Mappable, Codable{
     
     var id:String?
     var idInt:Int?

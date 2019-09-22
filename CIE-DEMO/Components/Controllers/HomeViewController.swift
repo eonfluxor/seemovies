@@ -19,7 +19,13 @@ class HomeViewController: BaseViewController  {
      
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "Trending"
+    }
     override func viewDidAppear(_ animated: Bool) {
+        navigationController?.hidesBarsOnSwipe = true
+        super.viewWillAppear(animated)
         reloadData()
     }
 
