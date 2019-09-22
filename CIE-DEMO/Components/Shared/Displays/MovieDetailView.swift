@@ -115,7 +115,7 @@ extension MovieDetailView {
         posterShadow.snp_makeConstraints { (make) in
             make.width.equalTo(POSTER_SIZE * 12.0/16.0)
             make.height.equalTo(POSTER_SIZE )
-            make.top.equalTo(self.snp_bottom).multipliedBy(0.3)
+            make.top.equalTo(self.snp_bottom).multipliedBy(0.35)
             make.left.equalTo(PADDING)
         }
         
@@ -137,23 +137,18 @@ extension MovieDetailView {
             make.bottom.equalTo(poster.snp_topMargin).offset(PADDING+30)
         }
         
-        
-        
-        
     }
     
     func setupInfo(){
         
         titleLabel = UILabel()
-        titleLabel.textColor = Services.theme.LIGHT_GREY
+        titleLabel.textColor = Services.theme.WHITE
         titleLabel.text = "The Martian"
         titleLabel.font =  Services.theme.H1_FONT
         titleLabel.textAlignment = .center
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
      
-
-        
         genreLabel = UILabel()
         genreLabel.textColor = Services.theme.LIGHT_GREY
         genreLabel.text = "Drama, Adventure, Science Fiction"
@@ -207,8 +202,8 @@ extension MovieDetailView {
         overviewLabel.snp_makeConstraints { (make) in
             make.width.equalToSuperview().inset(PADDING)
             make.left.equalTo(PADDING)
-            make.top.equalTo((POSTER_SIZE / 2.0) + Double(PADDING))
-            make.height.greaterThanOrEqualTo(80)
+            make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
+            make.height.lessThanOrEqualTo(200)
         }
     }
     

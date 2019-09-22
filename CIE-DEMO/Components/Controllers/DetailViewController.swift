@@ -37,7 +37,7 @@ class DetailViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.hidesBarsOnSwipe = true 
+        navigationController?.hidesBarsOnSwipe = true
        
         collectionView.reloadData()
     }
