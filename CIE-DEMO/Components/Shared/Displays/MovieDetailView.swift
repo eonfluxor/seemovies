@@ -19,7 +19,7 @@ class MovieDetailView: UIView {
     var movie: Movie!
     
     // UI containers
-    var backdropContainer : UIImageView!
+
     var backdropContainerPoster : UIImageView!
     var infoContainer : UIView!
     
@@ -63,9 +63,7 @@ extension MovieDetailView {
         backdropContainerPoster.contentMode  = .scaleAspectFill
         
         
-        backdropContainer = UIImageView()
-        backdropContainer.contentMode  = .scaleAspectFill
-        
+       
         infoContainer = UIView()
         infoContainer.backgroundColor = Services.theme.LIGHT_GREY
         
@@ -87,7 +85,6 @@ extension MovieDetailView {
         
         
         addSubview(backdropContainerPoster)
-        addSubview(backdropContainer)
         addSubview(infoContainer)
         addSubview(posterShadow)
         addSubview(favoriteButton)
@@ -101,23 +98,19 @@ extension MovieDetailView {
             make.height.equalToSuperview().multipliedBy(0.4)
         }
         
-        backdropContainer.snp_makeConstraints { (make) in
-            
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.4)
-        }
+     
         
         infoContainer.snp_makeConstraints { (make) in
             make.width.equalToSuperview()
-            make.height.equalToSuperview().inset(Services.theme.HEADER_HEIGHT/2)
-            make.top.equalToSuperview().offset(Services.theme.HEADER_HEIGHT)
+            make.height.equalToSuperview().multipliedBy(0.5)
+            make.top.equalTo(self.snp_bottom).multipliedBy(0.5)
             make.left.equalTo(0)
         }
         
         posterShadow.snp_makeConstraints { (make) in
             make.width.equalTo(POSTER_SIZE * 12.0/16.0)
             make.height.equalTo(POSTER_SIZE )
-            make.top.equalTo(  Double(Services.theme.HEADER_HEIGHT) - (POSTER_SIZE / 2.0) )
+            make.top.equalTo(self.snp_bottom).multipliedBy(0.3)
             make.left.equalTo(PADDING)
         }
         
@@ -173,7 +166,7 @@ extension MovieDetailView {
         overviewLabel.textColor = Services.theme.PRIMARY_COLOR
         overviewLabel.text = "Bring Him Home"
         overviewLabel.font =  Services.theme.DEFAULT_FONT
-        overviewLabel.numberOfLines  = 7
+        overviewLabel.numberOfLines  = -1
         
         
         addSubview(titleLabel)
@@ -181,7 +174,7 @@ extension MovieDetailView {
         
         
         titleLabel.snp_makeConstraints { (make) in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.topMargin).offset(Float(PADDING) * 2.5)
+            make.top.equalTo(self.snp_bottom).multipliedBy(0.2)
             make.left.equalTo(PADDING)
             make.right.equalTo(self).inset(PADDING)
             make.height.lessThanOrEqualTo(30)
@@ -208,14 +201,12 @@ extension MovieDetailView {
             make.width.equalToSuperview().inset(PADDING)
             make.left.equalTo(PADDING)
             make.top.equalTo((POSTER_SIZE / 2.0) + Double(PADDING))
-            make.height.equalTo(80)
+            make.height.greaterThanOrEqualTo(80)
         }
         
       
         
     }
-    
-    //    func setup
     
     
 }
@@ -246,36 +237,12 @@ extension MovieDetailView {
         titleLabel.text = movie.title
         overviewLabel.text = movie.description
         
-        
     }
     
     func displayExtraInfo(){
         
         favoriteButton.setupWith(movie: movie)
-        
-        guard let url =  URL(string:movie.back_url!) else {
-            return
-        }
-        
-        backdropContainer.alpha = 0
-        backdropContainer.transform = CGAffineTransform.init(scaleX: 2.0, y: 2.0)
-        backdropContainer.af_setImage(
-            withURL: url,
-            placeholderImage: nil,
-            filter: nil,
-            imageTransition: .crossDissolve(0.5),
-            completion: { [weak self] response in
-                if let image = response.value {
-                    self?.displayOptimalTitleColor(image:image)
-                }
-        })
-        
-        UIView.animate(withDuration: 0.5, delay: 1, options: [], animations: {
-            self.backdropContainer.alpha = 1
-            self.backdropContainer.transform = CGAffineTransform.identity
-        }, completion:nil);
-        
-        
+ 
     }
 }
 
