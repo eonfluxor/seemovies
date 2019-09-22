@@ -16,9 +16,8 @@ typealias APIMovieCompletion = (Movie)->Void
 
 class APIService: NSObject {
     
+    //TODO: Revoke and read from external (non-github) file (maybe git-crypt)
     static let API_KEY_V3 = "43af0066f64198f00c8d98d9d347b31f"
-    static let API_KEY_V4 = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0M2FmMDA2NmY2NDE5OGYwMGM4ZDk4ZDlkMzQ3YjMxZiIsInN1YiI6IjVkODUyMGVhMDA2ZWVlMDAxNzM0MDMxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.G5nKeriZdzieIGRMjmnSspyR5c7Jr8wL2fPSqIclh3c"
-    
     
     func endpoint(_ url:String)->String{
         return "\(url)?api_key=\(APIService.API_KEY_V3)"

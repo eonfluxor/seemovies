@@ -14,6 +14,7 @@ class DetailViewController: BaseViewController {
     
     let PADDING : Int = 8
     let HEADER_CELL = "MovieDetailCell"
+    let SIMILAR_CELL = "SimilarMoviesCell"
     
     var movie : Movie?
     var detailHeader : MovieDetailView!
@@ -25,12 +26,9 @@ class DetailViewController: BaseViewController {
         
         setupNavStyle()
         setupCollectionView()
-//        displayCachedInfo()
-       
-
+    
     }
-    
-    
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -41,8 +39,8 @@ class DetailViewController: BaseViewController {
         super.viewDidAppear(animated)
         navigationController?.hidesBarsOnSwipe = false //TODO: set to true once wrapped in scrollview
         navigationController?.setNavigationBarHidden(false, animated: true)
-//        displayCachedInfo()
-//        displayExtraInfo()
+
+        collectionView.reloadData()
     }
     
     func setupNavStyle(){
@@ -70,6 +68,8 @@ extension DetailViewController {
         collectionView.delegate = self
         
         collectionView.register(MovieDetailCellView.self, forCellWithReuseIdentifier: HEADER_CELL)
+        collectionView.register(SimilarMoviesCell.self, forCellWithReuseIdentifier: SIMILAR_CELL)
+        
         collectionView.contentInset = UIEdgeInsets(top: -90, left: 0, bottom: 0, right: 0)
         
         view.addSubview(collectionView)
@@ -90,7 +90,7 @@ extension DetailViewController {
 extension DetailViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -98,13 +98,27 @@ extension DetailViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HEADER_CELL, for: indexPath) as! MovieDetailCellView
         
-        if let movie = movie {
-            cell.setupWith(movie: movie)
+       
+        if indexPath.section == 0 {
+           
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HEADER_CELL, for: indexPath) as! MovieDetailCellView
+            if let movie = movie {
+                cell.setupWith(movie: movie)
+            }
+            return cell
+            
+        } else if indexPath.section == 1 {
+           
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SIMILAR_CELL, for: indexPath) as! SimilarMoviesCell
+           
+            return cell
         }
         
-        return cell
+        fatalError("All sections must be handled")
+        return UICollectionViewCell()
+       
     }
 }
 
@@ -124,8 +138,13 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width = Int(collectionView.bounds.size.width)
-        let height = Int(view.frame.height * 0.6)
+        let width = collectionView.bounds.size.width
+        var height = view.frame.height * 0.6
+        
+        if(indexPath.section == 1){
+            height = view.frame.height * 0.5
+        }
+        
         return CGSize( width: width , height: height )
     }
     func collectionView(_ collectionView: UICollectionView,

@@ -10,7 +10,7 @@ import UIKit
 
 class ThemeService: NSObject {
     
-    
+    static let PADDING = 20
     static let CELLS_HEIGHT = 222
     static let FONT_FAMILY = "HelveticaNeue"
     

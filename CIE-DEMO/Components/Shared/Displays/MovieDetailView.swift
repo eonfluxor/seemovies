@@ -12,7 +12,7 @@ import ChameleonFramework
 class MovieDetailView: UIView {
 
     let POSTER_SIZE = 200.0
-    let PADDING = 20
+    let PADDING = Services.theme.PADDING
     
     
     // MODELS
@@ -61,7 +61,6 @@ extension MovieDetailView {
         
         backdropContainerPoster = UIImageView()
         backdropContainerPoster.contentMode  = .scaleAspectFill
-        
         
        
         infoContainer = UIView()
