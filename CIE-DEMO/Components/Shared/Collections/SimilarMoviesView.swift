@@ -19,6 +19,7 @@ class SimilarMoviesView: UIView {
     // PIPELINE
     var didSelectMovie : MovieClosure?
     var movies: [Movie] = []
+    var movie : Movie!
     
     override init(frame: CGRect) {
         
@@ -51,7 +52,7 @@ class SimilarMoviesView: UIView {
 extension SimilarMoviesView {
     
     func setupWith(movie: Movie){
-    
+        self.movie = movie
     }
     
     func setupCollectionView(){
@@ -84,7 +85,12 @@ extension SimilarMoviesView {
 
 extension SimilarMoviesView {
     func loadMovies(){
-        Services.api.getMoviesList { [weak self] (movies) in
+        
+        guard let mid = movie.id else {
+            return
+        }
+        
+        Services.api.getSimilarTo(movieId: mid ) { [weak self] (movies) in
           
             self?.movies = movies
             self?.collectionView.reloadData()

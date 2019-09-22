@@ -24,7 +24,6 @@ class APIService: NSObject {
     }
     
     func getMoviesList(from page:Int? = nil, _ completion:@escaping APIMovieListCompletion)->Void{
-      
         Alamofire.request(endpoint(APIEndpoints.trendingMovies())).responseObject { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
@@ -36,8 +35,20 @@ class APIService: NSObject {
         }
     }
     
+    func getSimilarTo(movieId : String, _ completion:@escaping APIMovieListCompletion) {
+        Alamofire.request(endpoint(APIEndpoints.similarMovies(movieId:movieId))).responseObject { (response: DataResponse<APIResponseMovieList>) in
+            
+            guard let response = response.result.value else {
+                assert(false, "Unexepcted response format")
+            }
+            DispatchQueue.main.async {
+                completion(response.results ?? []);
+            }
+        }
+    }
+    
     func get(movieId : String, _ completion:@escaping APIMovieCompletion) {
-        Alamofire.request(endpoint(APIEndpoints.movieInfo(movieId))).responseObject { (response: DataResponse<Movie>) in
+        Alamofire.request(endpoint(APIEndpoints.movieInfo(movieId:movieId))).responseObject { (response: DataResponse<Movie>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
@@ -48,5 +59,7 @@ class APIService: NSObject {
             }
         }
     }
+    
+    
     
 }

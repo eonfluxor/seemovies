@@ -14,14 +14,11 @@ struct APIEndpoints {
         return "https://api.themoviedb.org/3/trending/movie/day"
     }
     
-    static func similarMovies(_ movie : Movie)->String{
-        guard let mid = movie.id else {
-            fatalError("movie id is required")
-        }
-        return "https://api.themoviedb.org/3/movie/\(mid)/recommendations"
+    static func similarMovies(movieId : String)->String{
+        return "https://api.themoviedb.org/3/movie/\(movieId)/recommendations"
     }
     
-    static func movieInfo(_ movieId : String)->String{
+    static func movieInfo(movieId : String)->String{
         return "https://api.themoviedb.org/3/movie/\(movieId)"
     }
 
