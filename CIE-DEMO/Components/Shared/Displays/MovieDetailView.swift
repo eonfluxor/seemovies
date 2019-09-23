@@ -207,7 +207,7 @@ extension MovieDetailView {
             make.left.equalTo(self.snp_leftMargin).offset(PADDING)
             make.right.equalTo(self.snp_rightMargin).inset(PADDING)
             make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
-            make.height.lessThanOrEqualTo(self)
+            make.bottom.lessThanOrEqualTo(snp_bottom)
         }
     }
     
@@ -273,7 +273,7 @@ extension MovieDetailView {
         
        
         
-       UIView.animate(withDuration: 1.0, delay: 0, options: .allowUserInteraction, animations: {
+       UIView.animate(withDuration: 1.0, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState] , animations: {
             self.infoContainer.backgroundColor = avgColor
             self.overviewLabel.textColor = textColor
             self.taglineLabel.textColor = textColor

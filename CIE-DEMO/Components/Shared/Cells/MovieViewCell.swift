@@ -235,12 +235,11 @@ extension MovieViewCell{
             
             DispatchQueue.main.async {
                 
-                UIView.animate(withDuration: 0.25, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState] , animations: {
                     self.contentView.backgroundColor = avgColor
                     self.dateLabel.textColor = textColor
                     self.titleLabel.textColor = textColor
                     self.descLabel.textColor = textColor
-                });
+               
                
                
             }
