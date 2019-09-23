@@ -207,7 +207,7 @@ extension MovieDetailView {
             make.left.equalTo(self.snp_leftMargin).offset(PADDING)
             make.right.equalTo(self.snp_rightMargin).inset(PADDING)
             make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
-            make.bottom.lessThanOrEqualTo(snp_bottom)
+            make.bottom.lessThanOrEqualTo(snp_bottom).inset(PADDING)
         }
     }
     
