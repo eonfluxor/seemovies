@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Delayed
 
 // NOTE: I am not a big fan of the protocol / delegate pattern.
 // The same can be accomplished with a public closure.
@@ -19,6 +19,7 @@ protocol MoviesCollectionViewProtocol:AnyObject {
 class MoviesCollectionView: UIView {
     
     let PADDING : Int = 8
+    let SEARCHBAR_HEIGHT: Int = 60
     var page = 1
     var isLoading = false
     var lastMoviesCount = 0
@@ -26,6 +27,7 @@ class MoviesCollectionView: UIView {
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
     var searchbar : UISearchBar!
+    var searchString : String? = nil
     weak var delegate :MoviesCollectionViewProtocol?
     
    
@@ -33,16 +35,18 @@ class MoviesCollectionView: UIView {
     
     func dataFiltered()->[Movie] {
         
-        guard let searchText = searchbar.text else{
+        guard let searchString = searchString else {
             return movies
         }
         
-        guard searchText.count > 2 else{
+        guard searchString.count > 2 else{
             return movies
         }
+        
+        let string = searchString.lowercased()
         
         return movies.filter({ (movie) -> Bool in
-            return movie.title.contains(searchText) || movie.description.contains(searchText)
+            return movie.title.lowercased().contains(string) || movie.description.lowercased().contains(string)
         })
     }
     
@@ -57,12 +61,13 @@ extension MoviesCollectionView : UISearchBarDelegate{
         searchBar.barTintColor         = .white
         searchBar.delegate             = self
         searchBar.placeholder          = "Filter content..."
+
         
         addSubview(searchBar)
         
         searchBar.snp_makeConstraints { (make) in
             make.top.equalTo(snp_topMargin)
-            make.bottom.lessThanOrEqualTo(snp_topMargin).offset(60)
+            make.bottom.lessThanOrEqualTo(snp_topMargin).offset(SEARCHBAR_HEIGHT)
             make.left.equalTo(0)
             make.width.equalToSuperview()
         }
@@ -71,21 +76,30 @@ extension MoviesCollectionView : UISearchBarDelegate{
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // user did type something, check our datasource for text that looks the same
-        if searchText.count > 0 {
-            // search and reload data source
-//            self.searchBarActive    = true
-//            self.filterContentForSearchText(searchText)
-            self.collectionView?.reloadData()
-        }else{
-            // if text lenght == 0
-            // we will consider the searchbar is not active
-//            self.searchBarActive = false
-            self.collectionView?.reloadData()
+       
+        if searchText == ""  {
+            cancelSearching()
+            endEditing(true)
         }
         
+        syncCollectionView()
+        scrollToTop()
     }
     
+   
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        endEditing(true)
+    }
+    
+    func cancelSearching(){
+        DispatchQueue.main.async {
+            self.searchbar.resignFirstResponder()
+            self.searchbar.text = ""
+        }
+      
+    }
+   
     
 }
 
@@ -105,9 +119,10 @@ extension MoviesCollectionView {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: "MovieCell")
+        collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: cellName())
         
-        collectionView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 0, right: 0)
+        let top = CGFloat(SEARCHBAR_HEIGHT + PADDING)
+        collectionView.contentInset = UIEdgeInsets(top: top , left: CGFloat(0), bottom: CGFloat(0), right: CGFloat(0))
         
         addSubview(collectionView)
         
@@ -157,18 +172,26 @@ extension MoviesCollectionView {
         return true
     }
     
+    @objc func cellName()->String{
+        return "MovieCell"
+    }
+    
     func syncCollectionView() {
-       
-//        let lastIndex = lastMoviesCount - 1
-//        let diff = dataFiltered().count - lastMoviesCount
-//        lastMoviesCount = dataFiltered().count
-//
-//        let newCells = Array(1...diff).map { IndexPath(item: lastIndex + Int($0), section: 0) }
-//
-//        self.collectionView.insertItems(at: newCells)
+        Kron.debounceLast(timeOut: 0.25, resetKey: self) { (key, ctx) in
+            self._syncCollectionView()
+        }
         
-        self.collectionView.reloadData()
-        
+    }
+    
+    func _syncCollectionView(){
+        searchString = searchbar.text
+        collectionView.reloadData()
+    }
+    
+    func scrollToTop(){
+        if dataFiltered().count > 1 {
+            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+        }
     }
 }
 
@@ -185,7 +208,7 @@ extension MoviesCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellName(), for: indexPath) as! MovieViewCell
         
         let movie = dataFiltered()[indexPath.row]
         cell.setupWithMovie(movie)
@@ -198,7 +221,7 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let movie = movies[indexPath.row]
+        let movie = dataFiltered()[indexPath.row]
         delegate?.didSelect(movie: movie)
     }
     
