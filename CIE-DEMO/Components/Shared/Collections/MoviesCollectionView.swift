@@ -185,6 +185,8 @@ extension MoviesCollectionView {
     
     func _syncCollectionView(){
         searchString = searchbar.text
+        
+        ///TODO:  We should use a diff mechanism and insert/ delete based on the patches
         collectionView.reloadData()
     }
     
