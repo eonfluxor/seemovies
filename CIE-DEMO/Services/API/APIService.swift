@@ -19,12 +19,23 @@ class APIService: NSObject {
     //TODO: Revoke and read from external (non-github) file (maybe git-crypt)
     static let API_KEY_V3 = "43af0066f64198f00c8d98d9d347b31f"
     
-    func endpoint(_ url:String)->String{
-        return "\(url)?api_key=\(APIService.API_KEY_V3)"
+    func endpoint(_ urlstring:String)->String{
+        
+        let url = URL(string: urlstring)!
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        var queryItems =  Array(components.queryItems ?? [])
+        queryItems.append( URLQueryItem(name: "api_key", value: APIService.API_KEY_V3))
+        components.queryItems = queryItems
+        
+        if let finalstring = try? components.asURL().absoluteString {
+            return finalstring
+        }
+        
+        fatalError("this should never be reached")
     }
     
-    func getMoviesList(from page:Int? = nil, _ completion:@escaping APIMovieListCompletion)->Void{
-        Alamofire.request(endpoint(APIEndpoints.trendingMovies())).responseObject { (response: DataResponse<APIResponseMovieList>) in
+    func getMoviesList(from page:Int = 1, _ completion:@escaping APIMovieListCompletion)->Void{
+        Alamofire.request(endpoint(APIEndpoints.trendingMovies(page: page))).responseObject { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")

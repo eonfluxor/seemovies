@@ -18,6 +18,7 @@ class FavoritesViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Services.theme.MID_GREY
         setupCollectionView();
         
         Services.flux.subscribe(self)

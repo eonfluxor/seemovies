@@ -10,8 +10,8 @@ import UIKit
 
 struct APIEndpoints {
     
-    static func trendingMovies()->String{
-        return "https://api.themoviedb.org/3/trending/movie/day"
+    static func trendingMovies(page: Int = 1)->String{
+        return "https://api.themoviedb.org/3/trending/movie/day?page=\(page)"
     }
     
     static func similarMovies(movieId : String)->String{
