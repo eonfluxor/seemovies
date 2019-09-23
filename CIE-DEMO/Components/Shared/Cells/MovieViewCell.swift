@@ -238,10 +238,15 @@ extension MovieViewCell{
             let textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
             
             DispatchQueue.main.async {
-                self.contentView.backgroundColor = avgColor
-                self.dateLabel.textColor = textColor
-                self.titleLabel.textColor = textColor
-                self.descLabel.textColor = textColor
+                
+                UIView.animate(withDuration: 0.5, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState] , animations: {
+                    self.contentView.backgroundColor = avgColor
+                    self.dateLabel.textColor = textColor
+                    self.titleLabel.textColor = textColor
+                    self.descLabel.textColor = textColor
+                });
+               
+               
             }
         }
         

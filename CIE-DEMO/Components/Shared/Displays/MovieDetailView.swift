@@ -270,9 +270,14 @@ extension MovieDetailView {
     func updatePalette(withImage image : UIImage) {
         let avgColor = UIColor.init(averageColorFrom: image)
         let textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
-        infoContainer.backgroundColor = avgColor
-        overviewLabel.textColor = textColor
-        taglineLabel.textColor = textColor
+        
+       
+        
+       UIView.animate(withDuration: 1.0, delay: 0, options: .allowUserInteraction, animations: {
+            self.infoContainer.backgroundColor = avgColor
+            self.overviewLabel.textColor = textColor
+            self.taglineLabel.textColor = textColor
+        })
     }
 }
 

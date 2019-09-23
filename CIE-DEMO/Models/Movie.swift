@@ -65,7 +65,7 @@ struct Movie : Mappable, Codable{
         
         id = "\(idInt ?? 0)"
         back_url = "https://image.tmdb.org/t/p/original\(backdrop_path ?? "")"
-        poster_url = "https://image.tmdb.org/t/p/original\(poster_path  ?? "")"
+        poster_url = "https://image.tmdb.org/t/p/w500\(poster_path  ?? "")"
     }
     
     func  genresTitle() -> String {
