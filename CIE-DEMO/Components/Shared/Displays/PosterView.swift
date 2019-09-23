@@ -9,7 +9,6 @@
 import UIKit
 import PINCache
 import PINRemoteImage
-import DTPhotoViewerController
 
 class PosterView: UIImageView {
     
@@ -59,13 +58,8 @@ class PosterView: UIImageView {
 extension PosterView {
     
     @objc func didTapGesture(){
-     
-        guard let topController = UIApplication.shared.keyWindow?.rootViewController else {
-            return
-        }
         
-        let viewController = DTPhotoViewerController(referencedView: self, image: self.image)
-        topController.present(viewController, animated: true, completion: nil)
+        Services.router.presentImageViewPreview(self)
         
     }
 }

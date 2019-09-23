@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DTPhotoViewerController
 
 class RouterService: NSObject {
     
@@ -91,7 +92,15 @@ extension RouterService {
             
             
         }
+    }
+    
+    func presentImageViewPreview(_ imageView: UIImageView){
         
+        guard let topController = UIApplication.shared.keyWindow?.rootViewController else {
+            return
+        }
         
+        let viewController = DTPhotoViewerController(referencedView: imageView, image: imageView.image)
+        topController.present(viewController, animated: true, completion: nil)
     }
 }
