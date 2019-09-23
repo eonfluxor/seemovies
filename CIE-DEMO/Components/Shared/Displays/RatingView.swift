@@ -20,7 +20,7 @@ class RatingView: UIView {
         
         label = UILabel()
         label.textColor = Services.theme.PRIMARY_COLOR
-        label.text = "7.7"
+        label.text = "N/A"
         label.font =  Services.theme.H2_FONT_BOLD
         label.textAlignment = .center
         
