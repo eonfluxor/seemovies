@@ -9,6 +9,7 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - Delayed (2.3.6)
+  - DTPhotoViewerController (3.0.2)
   - ObjectMapper (3.5.1)
   - PINCache (3.0.1-beta.7):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.7)
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - AlamofireObjectMapper (~> 5.2)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
   - Delayed
+  - DTPhotoViewerController
   - ObjectMapper (~> 3.4)
   - PINRemoteImage (= 3.0.0-beta.14)
   - ReSwift (~> 5.0)
@@ -45,6 +47,7 @@ SPEC REPOS:
     - AlamofireImage
     - AlamofireObjectMapper
     - Delayed
+    - DTPhotoViewerController
     - ObjectMapper
     - PINCache
     - PINOperation
@@ -67,6 +70,7 @@ SPEC CHECKSUMS:
   AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Delayed: 84ce53e7a16a9fb93fdda058e2a21334a6567645
+  DTPhotoViewerController: 20501ce30cbb7ef981c5adcc024bc4f3e6e63f1a
   ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   PINCache: 7cb9ae068c8f655717f7c644ef1dff9fd573e979
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
@@ -74,6 +78,6 @@ SPEC CHECKSUMS:
   ReSwift: 628f1a9b3ee52e3b3ca2a644435472fd77afafe1
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
 
-PODFILE CHECKSUM: b52e84a2994f78483b0250fd2affbd5a1f0aff43
+PODFILE CHECKSUM: 491f30f73a143b31aa19a64f19a966942e800140
 
 COCOAPODS: 1.7.5

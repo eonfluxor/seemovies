@@ -69,7 +69,7 @@ extension MovieDetailView {
         infoContainer = UIView()
         infoContainer.backgroundColor = Services.theme.LIGHT_GREY
         
-        poster = PosterView()
+        poster = PosterView(frame: .zero)
         poster.layer.cornerRadius = 4
         poster.clipsToBounds = true
         
