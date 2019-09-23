@@ -159,17 +159,18 @@ extension MovieDetailView {
         
         taglineLabel = UILabel()
         taglineLabel.textColor = Services.theme.PRIMARY_COLOR
-        taglineLabel.text = "Bring Him Home"
+        taglineLabel.text = "tagline"
         taglineLabel.font =  Services.theme.H2_FONT
         taglineLabel.adjustsFontSizeToFitWidth = true
         taglineLabel.minimumScaleFactor = 0.5
         
         overviewLabel = UILabel()
         overviewLabel.textColor = Services.theme.PRIMARY_COLOR
-        overviewLabel.text = "Bring Him Home"
+        overviewLabel.text = "description"
         overviewLabel.font =  Services.theme.DEFAULT_FONT
         overviewLabel.numberOfLines  = -1
-        
+        overviewLabel.adjustsFontSizeToFitWidth = true
+        overviewLabel.minimumScaleFactor = 0.5
         
         addSubview(titleLabel)
         addSubview(genreLabel)
@@ -193,9 +194,10 @@ extension MovieDetailView {
         infoContainer.addSubview(overviewLabel)
         
         taglineLabel.snp_makeConstraints { (make) in
-            make.width.equalTo(titleLabel)
+          
             make.height.lessThanOrEqualTo(30)
             make.left.equalTo(posterShadow.snp_right).offset(PADDING)
+            make.right.equalTo(self.snp_rightMargin)
             make.top.equalTo(PADDING/2)
         }
         
@@ -204,7 +206,7 @@ extension MovieDetailView {
             make.left.equalTo(self.snp_leftMargin).offset(PADDING)
             make.right.equalTo(self.snp_rightMargin).inset(PADDING)
             make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
-            make.height.lessThanOrEqualTo(200)
+            make.height.lessThanOrEqualTo(self)
         }
     }
     

@@ -19,12 +19,15 @@ protocol MoviesCollectionViewProtocol:AnyObject {
 class MoviesCollectionView: UIView {
     
     let PADDING : Int = 8
+    var page = 1
+    var isLoading = false
     
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
     weak var delegate :MoviesCollectionViewProtocol?
     
     var movies: [Movie] = []
+    
 }
 
 extension MoviesCollectionView {
@@ -74,11 +77,23 @@ extension MoviesCollectionView {
     
     @objc func loadMovies(){
         
-        Services.api.getMoviesList { [weak self] (movies) in
+        guard !isLoading  else {
+            return
+        }
+        isLoading = true
+        page+=1
+        print("loading page \(page)")
+        
+        Services.api.getMoviesList(from : page) { [weak self] (movies) in
+            self?.isLoading = false
             self?.refreshControl.endRefreshing()
-            self?.movies = movies
+            self?.movies.append(contentsOf: movies)
             self?.collectionView.reloadData()
         }
+    }
+    
+    @objc func isInfiniteFeed()->Bool{
+        return true
     }
 }
 
@@ -110,6 +125,13 @@ extension MoviesCollectionView: UICollectionViewDelegate {
         
         let movie = movies[indexPath.row]
         delegate?.didSelect(movie: movie)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        if isInfiniteFeed() && indexPath.row == movies.count - 2 {
+            loadMovies()
+        }
     }
 }
 

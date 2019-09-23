@@ -10,6 +10,11 @@ import UIKit
 
 class MovieFavsCollectionView: MoviesCollectionView {
     
+    
+    override func isInfiniteFeed()->Bool{
+        return false
+    }
+    
     override func loadMovies(){
         
         let state = Services.flux.state
