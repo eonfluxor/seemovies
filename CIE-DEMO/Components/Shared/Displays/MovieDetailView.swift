@@ -95,6 +95,7 @@ extension MovieDetailView {
         headerImage.addSubview(headerImageOverlay)
         
         headerImage.snp_makeConstraints { (make) in
+            make.top.equalTo(0)
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.5)
         }

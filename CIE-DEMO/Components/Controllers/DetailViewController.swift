@@ -37,7 +37,7 @@ class DetailViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.hidesBarsOnSwipe = true
+//        navigationController?.hidesBarsOnSwipe = true
        
         collectionView.reloadData()
     }
@@ -67,8 +67,7 @@ extension DetailViewController {
         
         collectionView.register(MovieDetailCellView.self, forCellWithReuseIdentifier: HEADER_CELL)
         collectionView.register(SimilarMoviesCell.self, forCellWithReuseIdentifier: SIMILAR_CELL)
-        
-        collectionView.contentInset = UIEdgeInsets(top: -90, left: 0, bottom: 0, right: 0)
+        collectionView.contentInsetAdjustmentBehavior = .never
         
         view.addSubview(collectionView)
         
@@ -79,6 +78,7 @@ extension DetailViewController {
         
         self.collectionView = collectionView
         
+      
     }
 }
 
