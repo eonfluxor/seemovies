@@ -240,9 +240,14 @@ extension MovieDetailView {
             poster.displayImage(url)
         }
         
+        if let rating = movie.vote_average {
+             ratingDisplay.setRating(rating)
+        }
+        
         titleLabel.text = movie.title
         overviewLabel.text = movie.description
         
+       
     }
     
     func displayExtraInfo(){
