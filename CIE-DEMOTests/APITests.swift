@@ -25,10 +25,6 @@ class APITests: XCTestCase {
         
         XCTAssert( endpointURL == expectedURL)
         
-        endpointURL =  Services.api.endpoint(APIEndpoints.trendingMovies())
-        expectedURL = "https://api.themoviedb.org/3/trending/movie/day?api_key=\(APIService.API_KEY_V3)"
-       
-        XCTAssert( endpointURL == expectedURL)
         
         endpointURL =  Services.api.endpoint(APIEndpoints.movieInfo(movieId:"1"))
         expectedURL = "https://api.themoviedb.org/3/movie/1?api_key=\(APIService.API_KEY_V3)"
