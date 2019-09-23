@@ -67,6 +67,11 @@ class RatingView: UIView {
 extension RatingView {
     
     func  setRating(_ rating:Float){
-        label.text = String(format:"%.1f",rating)
+        if rating < 0.5 {
+            label.text = "N/A"
+        }else{
+            label.text = String(format:"%.1f",rating)
+        }
+        
     }
 }
