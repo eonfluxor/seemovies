@@ -25,9 +25,67 @@ class MoviesCollectionView: UIView {
     
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
+    var searchbar : UISearchBar!
     weak var delegate :MoviesCollectionViewProtocol?
     
+   
     var movies: [Movie] = []
+    
+    func dataFiltered()->[Movie] {
+        
+        guard let searchText = searchbar.text else{
+            return movies
+        }
+        
+        guard searchText.count > 2 else{
+            return movies
+        }
+        
+        return movies.filter({ (movie) -> Bool in
+            return movie.title.contains(searchText) || movie.description.contains(searchText)
+        })
+    }
+    
+}
+
+extension MoviesCollectionView : UISearchBarDelegate{
+    
+    func setupSearch(){
+        let searchBar = UISearchBar(frame: .zero)
+        searchBar.searchBarStyle       = .prominent
+        searchBar.tintColor            = .white
+        searchBar.barTintColor         = .white
+        searchBar.delegate             = self
+        searchBar.placeholder          = "Filter content..."
+        
+        addSubview(searchBar)
+        
+        searchBar.snp_makeConstraints { (make) in
+            make.top.equalTo(snp_topMargin)
+            make.bottom.lessThanOrEqualTo(snp_topMargin).offset(60)
+            make.left.equalTo(0)
+            make.width.equalToSuperview()
+        }
+        
+        self.searchbar = searchBar
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // user did type something, check our datasource for text that looks the same
+        if searchText.count > 0 {
+            // search and reload data source
+//            self.searchBarActive    = true
+//            self.filterContentForSearchText(searchText)
+            self.collectionView?.reloadData()
+        }else{
+            // if text lenght == 0
+            // we will consider the searchbar is not active
+//            self.searchBarActive = false
+            self.collectionView?.reloadData()
+        }
+        
+    }
+    
     
 }
 
@@ -36,6 +94,7 @@ extension MoviesCollectionView {
     func setup(){
         setupCollectionView()
         setupPullToRefresh()
+        setupSearch()
     }
     
     func setupCollectionView(){
@@ -47,6 +106,8 @@ extension MoviesCollectionView {
         collectionView.delegate = self
         
         collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: "MovieCell")
+        
+        collectionView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 0, right: 0)
         
         addSubview(collectionView)
         
@@ -98,13 +159,15 @@ extension MoviesCollectionView {
     
     func syncCollectionView() {
        
-        let lastIndex = lastMoviesCount - 1
-        let diff = movies.count - lastMoviesCount
-        lastMoviesCount = movies.count
+//        let lastIndex = lastMoviesCount - 1
+//        let diff = dataFiltered().count - lastMoviesCount
+//        lastMoviesCount = dataFiltered().count
+//
+//        let newCells = Array(1...diff).map { IndexPath(item: lastIndex + Int($0), section: 0) }
+//
+//        self.collectionView.insertItems(at: newCells)
         
-        let newCells = Array(1...diff).map { IndexPath(item: lastIndex + Int($0), section: 0) }
-        
-        self.collectionView.insertItems(at: newCells)
+        self.collectionView.reloadData()
         
     }
 }
@@ -118,13 +181,13 @@ extension MoviesCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        return dataFiltered().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieViewCell
         
-        let movie = movies[indexPath.row]
+        let movie = dataFiltered()[indexPath.row]
         cell.setupWithMovie(movie)
         
         return cell

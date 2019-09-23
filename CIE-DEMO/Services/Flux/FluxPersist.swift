@@ -9,7 +9,7 @@
 import UIKit
 import Delayed
 
-let FLUX_ARCHIVE_KEY = "FLUX_ARCHIVE_KEY.v1"
+let FLUX_ARCHIVE_KEY = "FLUX_ARCHIVE_KEY.v1.0.1"
 
 func FluxPersistIntent(){
     
