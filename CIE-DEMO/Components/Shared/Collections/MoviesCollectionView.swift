@@ -60,7 +60,7 @@ extension MoviesCollectionView : UISearchBarDelegate{
         searchBar.tintColor            = .white
         searchBar.barTintColor         = .white
         searchBar.delegate             = self
-        searchBar.placeholder          = "Filter content..."
+        searchBar.placeholder          = "Filter..."
 
         
         addSubview(searchBar)
