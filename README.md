@@ -15,3 +15,7 @@ About this project:
 ## Searchbar integration
 
 ![search](https://user-images.githubusercontent.com/425926/65406421-5c015400-dd94-11e9-9054-80f50a5b61c4.gif)
+
+## Image Preview
+
+![imagepreview](https://user-images.githubusercontent.com/425926/65433442-db614880-ddd1-11e9-92b7-b240751fb65a.gif)
