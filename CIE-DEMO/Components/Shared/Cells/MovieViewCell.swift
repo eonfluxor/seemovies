@@ -15,7 +15,6 @@ class MovieViewCell: UICollectionViewCell {
    
     //refs
     var movie : Movie?
-    
     //containers
     var imageContainer : UIView!
     var descContainer : UIView!
@@ -51,10 +50,6 @@ class MovieViewCell: UICollectionViewCell {
         ratingDisplay.setRating(0)
         posterView.displayImage(nil)
         
-        self.contentView.backgroundColor = Services.theme.MID_GREY
-        self.dateLabel.textColor = Services.theme.BLACK
-        self.titleLabel.textColor = Services.theme.BLACK
-        self.descLabel.textColor = Services.theme.BLACK
         
     }
     
@@ -114,7 +109,7 @@ extension MovieViewCell{
         imageContainer = UIView()
         descContainer = UIView()
         
-        contentView.backgroundColor = Services.theme.WHITE
+        contentView.backgroundColor = Services.theme.MID_GREY
         contentView.addSubview(imageContainer)
         contentView.addSubview(descContainer)
         contentView.layer.cornerRadius = 2
@@ -232,6 +227,7 @@ extension MovieViewCell{
     
     func updatePalette(withImage image : UIImage) {
         
+       
         DispatchQueue.global(qos: .background).async {
             
             let avgColor = UIColor.init(averageColorFrom: image.af_imageScaled(to: CGSize(width: 50, height: 50)))
@@ -239,7 +235,7 @@ extension MovieViewCell{
             
             DispatchQueue.main.async {
                 
-                UIView.animate(withDuration: 0.5, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState] , animations: {
+                UIView.animate(withDuration: 0.25, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState] , animations: {
                     self.contentView.backgroundColor = avgColor
                     self.dateLabel.textColor = textColor
                     self.titleLabel.textColor = textColor

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Delayed
 
 // NOTE: I am not a big fan of the protocol / delegate pattern.
 // The same can be accomplished with a public closure.
@@ -19,15 +19,87 @@ protocol MoviesCollectionViewProtocol:AnyObject {
 class MoviesCollectionView: UIView {
     
     let PADDING : Int = 8
+    let SEARCHBAR_HEIGHT: Int = 60
     var page = 1
     var isLoading = false
     var lastMoviesCount = 0
     
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
+    var searchbar : UISearchBar!
+    var searchString : String? = nil
     weak var delegate :MoviesCollectionViewProtocol?
     
+   
     var movies: [Movie] = []
+    
+    func dataFiltered()->[Movie] {
+        
+        guard let searchString = searchString else {
+            return movies
+        }
+        
+        guard searchString.count > 2 else{
+            return movies
+        }
+        
+        let string = searchString.lowercased()
+        
+        return movies.filter({ (movie) -> Bool in
+            return movie.title.lowercased().contains(string) || movie.description.lowercased().contains(string)
+        })
+    }
+    
+}
+
+extension MoviesCollectionView : UISearchBarDelegate{
+    
+    func setupSearch(){
+        let searchBar = UISearchBar(frame: .zero)
+        searchBar.searchBarStyle       = .prominent
+        searchBar.tintColor            = .white
+        searchBar.barTintColor         = .white
+        searchBar.delegate             = self
+        searchBar.placeholder          = "Filter content..."
+
+        
+        addSubview(searchBar)
+        
+        searchBar.snp_makeConstraints { (make) in
+            make.top.equalTo(snp_topMargin)
+            make.bottom.lessThanOrEqualTo(snp_topMargin).offset(SEARCHBAR_HEIGHT)
+            make.left.equalTo(0)
+            make.width.equalToSuperview()
+        }
+        
+        self.searchbar = searchBar
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+       
+        if searchText == ""  {
+            cancelSearching()
+            endEditing(true)
+        }
+        
+        syncCollectionView()
+        scrollToTop()
+    }
+    
+   
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        endEditing(true)
+    }
+    
+    func cancelSearching(){
+        DispatchQueue.main.async {
+            self.searchbar.resignFirstResponder()
+            self.searchbar.text = ""
+        }
+      
+    }
+   
     
 }
 
@@ -36,6 +108,7 @@ extension MoviesCollectionView {
     func setup(){
         setupCollectionView()
         setupPullToRefresh()
+        setupSearch()
     }
     
     func setupCollectionView(){
@@ -46,7 +119,10 @@ extension MoviesCollectionView {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: "MovieCell")
+        collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: cellName())
+        
+        let top = CGFloat(SEARCHBAR_HEIGHT + PADDING)
+        collectionView.contentInset = UIEdgeInsets(top: top , left: CGFloat(0), bottom: CGFloat(0), right: CGFloat(0))
         
         addSubview(collectionView)
         
@@ -96,16 +172,28 @@ extension MoviesCollectionView {
         return true
     }
     
+    @objc func cellName()->String{
+        return "MovieCell"
+    }
+    
     func syncCollectionView() {
-       
-        let lastIndex = lastMoviesCount - 1
-        let diff = movies.count - lastMoviesCount
-        lastMoviesCount = movies.count
+        Kron.debounceLast(timeOut: 0.25, resetKey: self) { (key, ctx) in
+            self._syncCollectionView()
+        }
         
-        let newCells = Array(1...diff).map { IndexPath(item: lastIndex + Int($0), section: 0) }
+    }
+    
+    func _syncCollectionView(){
+        searchString = searchbar.text
         
-        self.collectionView.insertItems(at: newCells)
-        
+        ///TODO:  We should use a diff mechanism and insert/ delete based on the patches
+        collectionView.reloadData()
+    }
+    
+    func scrollToTop(){
+        if dataFiltered().count > 1 {
+            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+        }
     }
 }
 
@@ -118,13 +206,13 @@ extension MoviesCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        return dataFiltered().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellName(), for: indexPath) as! MovieViewCell
         
-        let movie = movies[indexPath.row]
+        let movie = dataFiltered()[indexPath.row]
         cell.setupWithMovie(movie)
         
         return cell
@@ -135,7 +223,7 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let movie = movies[indexPath.row]
+        let movie = dataFiltered()[indexPath.row]
         delegate?.didSelect(movie: movie)
     }
     

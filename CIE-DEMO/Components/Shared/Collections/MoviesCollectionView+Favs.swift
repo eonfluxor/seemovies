@@ -15,6 +15,10 @@ class MovieFavsCollectionView: MoviesCollectionView {
         return false
     }
     
+    override func cellName()->String{
+        return "MovieFavCell"
+    }
+    
     override func loadMovies(){
         
         let state = Services.flux.state
