@@ -52,6 +52,8 @@ class RouterService: NSObject {
         homeNavController = UINavigationController(rootViewController:homeRootController )
         favoritesNavController = UINavigationController(rootViewController: favoritesRootController)
         
+        homeNavController.navigationBar.prefersLargeTitles = true
+        favoritesNavController.navigationBar.prefersLargeTitles = true
         
         tabController.viewControllers = [homeNavController,
                                          favoritesNavController]
