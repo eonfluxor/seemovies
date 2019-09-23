@@ -74,7 +74,6 @@ extension MovieDetailView {
         poster.clipsToBounds = true
         
         posterShadow = UIView()
-        posterShadow.backgroundColor = .red
         posterShadow.layer.shadowColor = UIColor.black.cgColor
         posterShadow.layer.shadowOpacity = 0.6
         posterShadow.layer.shadowOffset = .zero
