@@ -61,7 +61,14 @@ extension MoviesCollectionView : UISearchBarDelegate{
         searchBar.barTintColor         = .white
         searchBar.delegate             = self
         searchBar.placeholder          = "Filter..."
-
+        searchBar.isTranslucent        = true
+        searchBar.backgroundColor      = UIColor(red: 1, green: 1, blue: 1, alpha: 0.75)
+        searchBar.backgroundImage      = UIImage()
+        
+        if let txfSearchField  = searchBar .value(forKey: "_searchField") as? UITextField {
+            txfSearchField.backgroundColor =  .clear
+        }
+       
         
         addSubview(searchBar)
         
