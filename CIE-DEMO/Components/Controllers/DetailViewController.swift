@@ -37,7 +37,6 @@ class DetailViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        navigationController?.hidesBarsOnSwipe = true
        
         collectionView.reloadData()
     }
@@ -149,7 +148,7 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
         var height = 600
         
         if(indexPath.section == 1){
-            height = Services.theme.CELLS_HEIGHT + 100
+            height = Services.theme.CELLS_HEIGHT + 160
         }
         
         return CGSize( width: width , height: height )

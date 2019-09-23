@@ -72,7 +72,7 @@ extension SimilarMoviesView {
         collectionView.snp_makeConstraints { (make) in
             make.left.equalTo(0)
             make.right.equalTo(self.snp_right)
-            make.top.equalTo(titleLabel.snp_bottom)
+            make.top.equalTo(titleLabel.snp_bottom).offset(PADDING)
             make.bottom.equalTo(self.snp_bottomMargin)
             
         }

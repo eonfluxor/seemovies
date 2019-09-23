@@ -218,7 +218,17 @@ extension MovieDetailView {
     
     func displayCachedInfo(){
         if let url =  URL(string:movie.back_url!) {
-            headerImage.af_setImage(withURL: url)
+            headerImage.af_setImage(withURL: url,
+                                    placeholderImage: nil,
+                                    filter: nil,
+                                    imageTransition: .crossDissolve(0.5),
+                                    completion: { [weak self] response in
+                                        
+                                        if let image = response.value {
+                                           self?.updatePalette(withImage: image)
+                                        }
+                                        
+            })
             headerImage.transform = CGAffineTransform.identity
             UIView.animate(withDuration: 30) {
                 self.headerImage.transform = CGAffineTransform(scaleX: 2, y: 2)
@@ -255,6 +265,14 @@ extension MovieDetailView {
         Services.api.get(movieId: mid) { (movie) in
             completion(movie)
         }
+    }
+    
+    func updatePalette(withImage image : UIImage) {
+        let avgColor = UIColor.init(averageColorFrom: image)
+        let textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
+        infoContainer.backgroundColor = avgColor
+        overviewLabel.textColor = textColor
+        taglineLabel.textColor = textColor
     }
 }
 
