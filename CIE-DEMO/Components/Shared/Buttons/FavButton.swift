@@ -54,7 +54,7 @@ class FavButton: UIView {
     
     func setupWith(movie: Movie){
         self.movie = movie
-        self.setNeedsLayout()
+        setNeedsLayout()
         
     }
     

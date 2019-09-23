@@ -9,8 +9,6 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - Delayed (2.3.6)
-  - Flask (1.1.31):
-    - Delayed (> 2.2.2)
   - ObjectMapper (3.5.1)
   - PINCache (3.0.1-beta.7):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.7)
@@ -35,7 +33,7 @@ DEPENDENCIES:
   - AlamofireImage (~> 3.5)
   - AlamofireObjectMapper (~> 5.2)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
-  - Flask (from `../../../flask`)
+  - Delayed
   - ObjectMapper (~> 3.4)
   - PINRemoteImage (= 3.0.0-beta.14)
   - ReSwift (~> 5.0)
@@ -57,8 +55,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   ChameleonFramework:
     :git: https://github.com/ViccAlexander/Chameleon.git
-  Flask:
-    :path: "../../../flask"
 
 CHECKOUT OPTIONS:
   ChameleonFramework:
@@ -71,7 +67,6 @@ SPEC CHECKSUMS:
   AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Delayed: 84ce53e7a16a9fb93fdda058e2a21334a6567645
-  Flask: 7b96fa3791998230abf144ce474be529c5429257
   ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   PINCache: 7cb9ae068c8f655717f7c644ef1dff9fd573e979
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
@@ -79,6 +74,6 @@ SPEC CHECKSUMS:
   ReSwift: 628f1a9b3ee52e3b3ca2a644435472fd77afafe1
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
 
-PODFILE CHECKSUM: 263ecb13033dd255164168b667f213b27dc9e5e9
+PODFILE CHECKSUM: b52e84a2994f78483b0250fd2affbd5a1f0aff43
 
 COCOAPODS: 1.7.5

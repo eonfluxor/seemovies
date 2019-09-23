@@ -215,8 +215,8 @@ extension MovieViewCell{
         }
         
         favButton.snp_makeConstraints { (make) in
-            make.left.equalTo(self.snp_rightMargin).inset(120)
-            make.right.equalTo(self.snp_rightMargin)
+            make.left.equalTo(snp_rightMargin).inset(120)
+            make.right.equalTo(snp_rightMargin)
             make.top.equalTo(ratingDisplay.snp_bottom)
             make.height.lessThanOrEqualTo(60)
         }

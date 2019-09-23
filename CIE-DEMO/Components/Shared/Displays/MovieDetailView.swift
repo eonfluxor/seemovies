@@ -109,15 +109,15 @@ extension MovieDetailView {
         infoContainer.snp_makeConstraints { (make) in
             make.width.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.5)
-            make.top.equalTo(self.snp_bottom).multipliedBy(0.5)
+            make.top.equalTo(snp_bottom).multipliedBy(0.5)
             make.left.equalTo(0)
         }
         
         posterShadow.snp_makeConstraints { (make) in
             make.width.equalTo(POSTER_SIZE * 12.0/16.0)
             make.height.equalTo(POSTER_SIZE )
-            make.top.equalTo(self.snp_bottom).multipliedBy(0.35)
-            make.left.equalTo(self.snp_leftMargin).offset(PADDING)
+            make.top.equalTo(snp_bottom).multipliedBy(0.35)
+            make.left.equalTo(snp_leftMargin).offset(PADDING)
         }
         
         poster.snp_makeConstraints { (make) in
@@ -178,7 +178,7 @@ extension MovieDetailView {
         
         
         titleLabel.snp_makeConstraints { (make) in
-            make.top.equalTo(self.snp_bottom).multipliedBy(0.2)
+            make.top.equalTo(snp_bottom).multipliedBy(0.2)
             make.left.equalTo(PADDING)
             make.right.equalTo(self).inset(PADDING)
             make.height.lessThanOrEqualTo(30)
@@ -198,14 +198,14 @@ extension MovieDetailView {
           
             make.height.lessThanOrEqualTo(30)
             make.left.equalTo(posterShadow.snp_right).offset(PADDING)
-            make.right.equalTo(self.snp_rightMargin)
+            make.right.equalTo(snp_rightMargin)
             make.top.equalTo(PADDING/2)
         }
         
         overviewLabel.snp_makeConstraints { (make) in
             
-            make.left.equalTo(self.snp_leftMargin).offset(PADDING)
-            make.right.equalTo(self.snp_rightMargin).inset(PADDING)
+            make.left.equalTo(snp_leftMargin).offset(PADDING)
+            make.right.equalTo(snp_rightMargin).inset(PADDING)
             make.top.equalTo(posterShadow.snp_bottom).offset(PADDING)
             make.bottom.lessThanOrEqualTo(snp_bottom).inset(PADDING)
         }

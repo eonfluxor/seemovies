@@ -35,8 +35,8 @@ class SimilarMoviesView: UIView {
         addSubview(titleLabel)
         
         titleLabel.snp_makeConstraints { (make) in
-            make.left.equalTo(self.snp_leftMargin)
-            make.right.equalTo(self.snp_rightMargin)
+            make.left.equalTo(snp_leftMargin)
+            make.right.equalTo(snp_rightMargin)
             make.height.lessThanOrEqualTo(30)
             make.top.lessThanOrEqualTo(PADDING)
         }
@@ -71,9 +71,9 @@ extension SimilarMoviesView {
         
         collectionView.snp_makeConstraints { (make) in
             make.left.equalTo(0)
-            make.right.equalTo(self.snp_right)
+            make.right.equalTo(snp_right)
             make.top.equalTo(titleLabel.snp_bottom).offset(PADDING)
-            make.bottom.equalTo(self.snp_bottomMargin)
+            make.bottom.equalTo(snp_bottomMargin)
             
         }
         

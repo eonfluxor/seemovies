@@ -160,7 +160,7 @@ extension MoviesCollectionView {
         isLoading = true
         page+=1
         
-        Services.api.getMoviesList(from : self.page) { [weak self] (movies) in
+        Services.api.getMoviesList(from : page) { [weak self] (movies) in
             self?.isLoading = false
             self?.refreshControl.endRefreshing()
             self?.movies.append(contentsOf: movies)
