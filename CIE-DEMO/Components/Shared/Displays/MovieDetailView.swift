@@ -262,7 +262,7 @@ extension MovieDetailView {
         
         titleLabel.text = movie.title
         overviewLabel.text = movie.description
-        dateLabel.text = movie.release_date_string
+        dateLabel.text = movie.release_date_human
        
     }
     

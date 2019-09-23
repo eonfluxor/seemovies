@@ -81,7 +81,7 @@ extension MovieViewCell{
         
         titleLabel.text = movie.title
         descLabel.text = movie.description
-        dateLabel.text = movie.release_date_string
+        dateLabel.text = movie.release_date_human
         
         if let rating = movie.vote_average {
             ratingDisplay.setRating(rating)

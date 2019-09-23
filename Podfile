@@ -15,7 +15,8 @@ target 'CIE-DEMO' do
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'ReSwift', '~> 5.0'
     pod "DTPhotoViewerController"
-
+    pod 'SwiftDate', '~> 6.1'
+    
     target 'CIE-DEMOTests' do
         inherit! :search_paths
     end

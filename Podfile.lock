@@ -28,6 +28,7 @@ PODS:
     - PINRemoteImage/Core
   - ReSwift (5.0.0)
   - SnapKit (4.0.1)
+  - SwiftDate (6.1.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -40,6 +41,7 @@ DEPENDENCIES:
   - PINRemoteImage (= 3.0.0-beta.14)
   - ReSwift (~> 5.0)
   - SnapKit (~> 4.0.0)
+  - SwiftDate (~> 6.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -54,6 +56,7 @@ SPEC REPOS:
     - PINRemoteImage
     - ReSwift
     - SnapKit
+    - SwiftDate
 
 EXTERNAL SOURCES:
   ChameleonFramework:
@@ -77,7 +80,8 @@ SPEC CHECKSUMS:
   PINRemoteImage: 81bbff853acc71c6de9e106e9e489a791b8bbb08
   ReSwift: 628f1a9b3ee52e3b3ca2a644435472fd77afafe1
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  SwiftDate: fa2bb3962056bb44047b4b85a30044e5eae30b03
 
-PODFILE CHECKSUM: 491f30f73a143b31aa19a64f19a966942e800140
+PODFILE CHECKSUM: 04a43db2efddc0ec876cfec39004877e1eff96c8
 
 COCOAPODS: 1.7.5

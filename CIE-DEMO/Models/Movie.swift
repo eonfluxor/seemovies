@@ -8,7 +8,7 @@
 
 import UIKit
 import ObjectMapper
-
+import SwiftDate
 
 struct Genre : Mappable, Codable{
     
@@ -38,7 +38,8 @@ struct Movie : Mappable, Codable{
     var back_url:String?
     var poster_url:String?
     var poster_path:String?
-    var release_date_string:String?
+    var release_date:String?
+    var release_date_human:String?
     var vote_count:Int?
     var vote_average:Float?
     var tagline:String?
@@ -58,7 +59,7 @@ struct Movie : Mappable, Codable{
         description     <-  map["overview"]
         backdrop_path   <- map["backdrop_path"]
         poster_path     <- map["poster_path"]
-        release_date_string <- map["release_date"]
+        release_date    <- map["release_date"]
         vote_count      <- map[ "vote_count"]
         vote_average    <- map["vote_average"]
         genres          <- map["genres"]
@@ -66,6 +67,13 @@ struct Movie : Mappable, Codable{
         id = "\(idInt ?? 0)"
         back_url = "https://image.tmdb.org/t/p/original\(backdrop_path ?? "")"
         poster_url = "https://image.tmdb.org/t/p/w500\(poster_path  ?? "")"
+        release_date_human = release_date
+        
+        if let datestring = release_date_human {
+            let date = datestring.toDate()
+            release_date_human = date?.toFormat("MMMM dd, yyyy")
+        }
+      
     }
     
     func  genresTitle() -> String {
