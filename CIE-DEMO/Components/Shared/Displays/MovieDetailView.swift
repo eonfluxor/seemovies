@@ -31,6 +31,7 @@ class MovieDetailView: UIView {
     var titleLabel  : UILabel!
     var genreLabel : UILabel!
     var taglineLabel : UILabel!
+    var dateLabel : UILabel!
     var ratingDisplay : RatingView!
     var overviewLabel : UILabel!
     var favoriteButton : FavButton!
@@ -126,7 +127,7 @@ extension MovieDetailView {
         ratingDisplay.snp_makeConstraints { (make) in
             make.left.equalTo(poster.snp_right).offset(PADDING)
             make.right.equalTo(poster.snp_right).offset(PADDING + 42)
-            make.top.equalTo(poster.snp_bottomMargin).inset(PADDING+42)
+            make.top.equalTo(poster.snp_bottomMargin).inset(PADDING+22)
             make.bottom.equalTo(poster.snp_bottomMargin)
         }
         
@@ -164,6 +165,13 @@ extension MovieDetailView {
         taglineLabel.adjustsFontSizeToFitWidth = true
         taglineLabel.minimumScaleFactor = 0.5
         
+        dateLabel = UILabel()
+        dateLabel.textColor = Services.theme.PRIMARY_COLOR
+        dateLabel.text = "tagline"
+        dateLabel.font =  Services.theme.H2_FONT
+        dateLabel.adjustsFontSizeToFitWidth = true
+        dateLabel.minimumScaleFactor = 0.5
+        
         overviewLabel = UILabel()
         overviewLabel.textColor = Services.theme.PRIMARY_COLOR
         overviewLabel.text = "description"
@@ -191,6 +199,7 @@ extension MovieDetailView {
         }
         
         infoContainer.addSubview(taglineLabel)
+        infoContainer.addSubview(dateLabel)
         infoContainer.addSubview(overviewLabel)
         
         taglineLabel.snp_makeConstraints { (make) in
@@ -199,6 +208,14 @@ extension MovieDetailView {
             make.left.equalTo(posterShadow.snp_right).offset(PADDING)
             make.right.equalTo(snp_rightMargin)
             make.top.equalTo(PADDING/2)
+        }
+        
+        dateLabel.snp_makeConstraints { (make) in
+            
+            make.height.equalTo(taglineLabel)
+            make.left.equalTo(taglineLabel)
+            make.right.equalTo(taglineLabel)
+            make.top.equalTo(taglineLabel.snp_bottom)
         }
         
         overviewLabel.snp_makeConstraints { (make) in
@@ -245,7 +262,7 @@ extension MovieDetailView {
         
         titleLabel.text = movie.title
         overviewLabel.text = movie.description
-        
+        dateLabel.text = movie.release_date_string
        
     }
     
@@ -281,6 +298,7 @@ extension MovieDetailView {
             self.infoContainer.backgroundColor = avgColor
             self.overviewLabel.textColor = textColor
             self.taglineLabel.textColor = textColor
+            self.dateLabel.textColor = textColor
         })
     }
 }
