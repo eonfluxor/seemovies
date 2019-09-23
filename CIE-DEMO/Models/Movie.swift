@@ -44,7 +44,7 @@ struct Movie : Mappable, Codable{
     var tagline:String?
     var status:String?
     var genres:[Genre]?
-    
+    var sortIndex = 0
     
     init?(map: Map) {
         

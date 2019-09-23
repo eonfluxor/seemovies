@@ -22,9 +22,11 @@ class MovieFavsCollectionView: MoviesCollectionView {
         guard let favValues = state?.favs.values else {
             return
         }
+        
+        let sorted = favValues.sorted(by:{ $0.sortIndex > $1.sortIndex })
        
         refreshControl.endRefreshing()
-        movies = Array(favValues)
+        movies = Array(sorted)
         collectionView.reloadData()
     }
 }

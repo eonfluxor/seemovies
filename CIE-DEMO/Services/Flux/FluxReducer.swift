@@ -20,7 +20,9 @@ func FluxReducer(action: Action, state: FluxState?) -> FluxState {
     switch action {
     case .addFavorite(let movie):
         if let id = movie.id {
-            state.favs[id] = movie
+            var storedMovie = movie
+            storedMovie.sortIndex = state.favs.count
+            state.favs[id] = storedMovie
         }
         break
     case .removeFavorite(let movie):
