@@ -171,7 +171,7 @@ extension MovieDetailView {
         overviewLabel.font =  Services.theme.DEFAULT_FONT
         overviewLabel.numberOfLines  = -1
         overviewLabel.adjustsFontSizeToFitWidth = true
-        overviewLabel.minimumScaleFactor = 0.5
+        overviewLabel.minimumScaleFactor = 0.75
         
         addSubview(titleLabel)
         addSubview(genreLabel)
