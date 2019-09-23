@@ -90,6 +90,8 @@ extension MovieViewCell{
         if let poster = movie.poster_url {
             
             posterView.displayImage(poster) { [weak self] image in
+                
+               
                 self?.updatePalette(withImage: image)
             }
         }
@@ -224,12 +226,19 @@ extension MovieViewCell{
     
  
     func updatePalette(withImage image : UIImage) {
-        let avgColor = UIColor.init(averageColorFrom: image)
-        let textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
-        contentView.backgroundColor = avgColor
-        dateLabel.textColor = textColor
-        titleLabel.textColor = textColor
-        descLabel.textColor = textColor
+        
+        DispatchQueue.global(qos: .background).async {
+            let avgColor = UIColor.init(averageColorFrom: image)
+            let textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
+           
+            DispatchQueue.main.async {
+                self.contentView.backgroundColor = avgColor
+                self.dateLabel.textColor = textColor
+                self.titleLabel.textColor = textColor
+                self.descLabel.textColor = textColor
+            }
+        }
+      
     }
     
     
