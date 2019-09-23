@@ -51,7 +51,7 @@ class MovieViewCell: UICollectionViewCell {
         ratingDisplay.setRating(0)
         posterView.displayImage(nil)
         
-        self.contentView.backgroundColor = Services.theme.LIGHT_GREY
+        self.contentView.backgroundColor = Services.theme.MID_GREY
         self.dateLabel.textColor = Services.theme.BLACK
         self.titleLabel.textColor = Services.theme.BLACK
         self.descLabel.textColor = Services.theme.BLACK

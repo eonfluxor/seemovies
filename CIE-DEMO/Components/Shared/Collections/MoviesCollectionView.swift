@@ -21,6 +21,7 @@ class MoviesCollectionView: UIView {
     let PADDING : Int = 8
     var page = 1
     var isLoading = false
+    var lastMoviesCount = 0
     
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
@@ -82,18 +83,29 @@ extension MoviesCollectionView {
         }
         isLoading = true
         page+=1
-        print("loading page \(page)")
         
-        Services.api.getMoviesList(from : page) { [weak self] (movies) in
+        Services.api.getMoviesList(from : self.page) { [weak self] (movies) in
             self?.isLoading = false
             self?.refreshControl.endRefreshing()
             self?.movies.append(contentsOf: movies)
-            self?.collectionView.reloadData()
+            self?.syncCollectionView()
         }
     }
     
     @objc func isInfiniteFeed()->Bool{
         return true
+    }
+    
+    func syncCollectionView() {
+       
+        let lastIndex = lastMoviesCount - 1
+        let diff = movies.count - lastMoviesCount
+        lastMoviesCount = movies.count
+        
+        let newCells = Array(1...diff).map { IndexPath(item: lastIndex + Int($0), section: 0) }
+        
+        self.collectionView.insertItems(at: newCells)
+        
     }
 }
 
