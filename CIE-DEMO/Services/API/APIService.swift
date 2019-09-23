@@ -18,6 +18,7 @@ class APIService: NSObject {
     
     //TODO: Revoke and read from external (non-github) file (maybe git-crypt)
     static let API_KEY_V3 = "43af0066f64198f00c8d98d9d347b31f"
+    let QUEUE = DispatchQueue(label: "com.test.api", qos: .background, attributes: .concurrent)
     
     func endpoint(_ urlstring:String)->String{
         
@@ -35,7 +36,7 @@ class APIService: NSObject {
     }
     
     func getMoviesList(from page:Int = 1, _ completion:@escaping APIMovieListCompletion)->Void{
-        Alamofire.request(endpoint(APIEndpoints.trendingMovies(page: page))).responseObject { (response: DataResponse<APIResponseMovieList>) in
+        Alamofire.request(endpoint(APIEndpoints.trendingMovies(page: page))).responseObject(queue: QUEUE) { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
@@ -47,7 +48,7 @@ class APIService: NSObject {
     }
     
     func getSimilarTo(movieId : String, _ completion:@escaping APIMovieListCompletion) {
-        Alamofire.request(endpoint(APIEndpoints.similarMovies(movieId:movieId))).responseObject { (response: DataResponse<APIResponseMovieList>) in
+        Alamofire.request(endpoint(APIEndpoints.similarMovies(movieId:movieId))).responseObject(queue: QUEUE) { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
@@ -59,7 +60,7 @@ class APIService: NSObject {
     }
     
     func get(movieId : String, _ completion:@escaping APIMovieCompletion) {
-        Alamofire.request(endpoint(APIEndpoints.movieInfo(movieId:movieId))).responseObject { (response: DataResponse<Movie>) in
+        Alamofire.request(endpoint(APIEndpoints.movieInfo(movieId:movieId))).responseObject(queue: QUEUE) { (response: DataResponse<Movie>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
