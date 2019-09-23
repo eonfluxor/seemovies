@@ -42,8 +42,6 @@ class FavButton: UIView {
             make.center.equalToSuperview()
         }
         
-        ///
-        
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.didTapGesture))
         addGestureRecognizer(tap)
     }
