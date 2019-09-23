@@ -12,7 +12,7 @@ import SnapKit
 class MovieViewCell: UICollectionViewCell {
     
     let PADDING : CGFloat = 16.0
-    
+    var colorsMap : [UIImage : [String : UIColor] ] = [:]
     //refs
     var movie : Movie?
     
@@ -228,9 +228,32 @@ extension MovieViewCell{
     func updatePalette(withImage image : UIImage) {
         
         DispatchQueue.global(qos: .background).async {
-            let avgColor = UIColor.init(averageColorFrom: image)
-            let textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
-           
+            
+            let cached = self.colorsMap[image ]
+            
+            var avgColor : UIColor
+            var textColor : UIColor
+            
+            if let cached = cached {
+                
+                print("cached")
+                avgColor = cached["avgColor"]!
+                textColor = cached["textColor"]!
+                
+            } else {
+               
+                print("calculating")
+                avgColor = UIColor.init(averageColorFrom: image.af_imageAspectScaled(toFit: CGSize(width: 50, height: 50)))
+                textColor = UIColor(contrastingBlackOrWhiteColorOn: avgColor, isFlat: true)
+                
+                let info = [
+                    "avgColor" : avgColor,
+                    "textColor" : textColor
+                ]
+                
+                self.colorsMap[image] = info
+            }
+            
             DispatchQueue.main.async {
                 self.contentView.backgroundColor = avgColor
                 self.dateLabel.textColor = textColor

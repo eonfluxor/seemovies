@@ -26,13 +26,16 @@ class PosterView: UIImageView {
     }
     
     func downloadImageAndDisplay(_ url:String, completion:ImageClosure? = nil ){
-        self.pin_setImage(from: URL(string: url)) { result in
-            
-            if let image = result.image {
-                 completion?(image)
+        DispatchQueue.global(qos: .background).async {
+            self.pin_setImage(from: URL(string: url)) { result in
+                
+                if let image = result.image {
+                    completion?(image)
+                }
+                
             }
-           
         }
+        
     }
     
 }
