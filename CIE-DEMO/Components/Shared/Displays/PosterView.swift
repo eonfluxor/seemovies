@@ -9,19 +9,35 @@
 import UIKit
 import PINCache
 import PINRemoteImage
+import DTPhotoViewerController
 
 class PosterView: UIImageView {
     
-    func displayImage(_ url:String?, completion:ImageClosure? = nil){
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
+        self.isUserInteractionEnabled = true
         self.contentMode = .scaleAspectFill
         self.clipsToBounds = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didTapGesture))
+        addGestureRecognizer(tap)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func displayImage(_ url:String?, completion:ImageClosure? = nil){
+        
+      
         self.image = nil
         
         if let url = url {
             downloadImageAndDisplay(url,completion: completion)
-        }
-        
+        } 
         
     }
     
@@ -38,4 +54,18 @@ class PosterView: UIImageView {
         
     }
     
+}
+
+extension PosterView {
+    
+    @objc func didTapGesture(){
+     
+        guard let topController = UIApplication.shared.keyWindow?.rootViewController else {
+            return
+        }
+        
+        let viewController = DTPhotoViewerController(referencedView: self, image: self.image)
+        topController.present(viewController, animated: true, completion: nil)
+        
+    }
 }

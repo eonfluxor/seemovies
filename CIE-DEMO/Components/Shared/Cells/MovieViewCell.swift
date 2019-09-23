@@ -137,7 +137,7 @@ extension MovieViewCell{
     }
     
     func setupImageDisplay(){
-        posterView = PosterView()
+        posterView =  PosterView(frame: .zero)
         
         imageContainer.addSubview(posterView)
         
