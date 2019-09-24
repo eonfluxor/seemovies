@@ -1,12 +1,6 @@
 # Seemovies
 
-Super secret project
-
-## Description
-
-About this project: 
-
-[🍿 View in youtube ▶️](https://youtu.be/6BGc6wZkEf4)
+This is a demo project for a swift App.
 
 ## Early Preview
 
