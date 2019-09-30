@@ -9,10 +9,10 @@
 import UIKit
 import PINCache
 import PINRemoteImage
+import RxSwift
+import RxCocoa
 
 class PosterView: UIImageView {
-    
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,9 +29,8 @@ class PosterView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func displayImage(_ url:String?, completion:ImageClosure? = nil){
+    func displayImage(_ url:String?, completion:ImageClosureOpt? = nil){
         
-      
         self.image = nil
         
         if let url = url {
@@ -40,7 +39,7 @@ class PosterView: UIImageView {
         
     }
     
-    func downloadImageAndDisplay(_ url:String, completion:ImageClosure? = nil ){
+    fileprivate func downloadImageAndDisplay(_ url:String, completion:ImageClosureOpt? = nil ){
         DispatchQueue.global(qos: .background).async {
             self.pin_setImage(from: URL(string: url)) { result in
                 
@@ -61,5 +60,28 @@ extension PosterView {
         
         Services.router.presentImageViewPreview(self)
         
+    }
+}
+
+extension Reactive where Base:PosterView{
+    var imageURL: Binder<String?> {
+        return Binder(self.base) { view, url in
+            view.displayImage(url)
+        }
+    }
+    
+    func displayImage(withUrl url: String) -> Single<UIImage> {
+        return Single<UIImage>.create { single in
+            
+            self.base.displayImage(url){ image in
+                if let image = image {
+                    single(.success(image))
+                }else{
+                    single(.error(NSError(domain: "network error", code: 0, userInfo: [url:url])))
+                }
+            }
+            
+            return Disposables.create()
+        }
     }
 }

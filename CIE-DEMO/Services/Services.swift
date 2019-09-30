@@ -11,6 +11,7 @@ import AlamofireImage
 
 typealias MovieClosure = (Movie)->Void
 typealias ImageClosure = (UIImage)->Void
+typealias ImageClosureOpt = (UIImage?)->Void
 
 class Services {
     static let router = RouterService()

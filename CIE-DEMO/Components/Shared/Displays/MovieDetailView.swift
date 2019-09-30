@@ -253,11 +253,11 @@ extension MovieDetailView {
         }
         
         if let url =  movie.poster_url {
-            poster.displayImage(url)
+            poster.rx.imageURL.onNext(url)
         }
         
         if let rating = movie.vote_average {
-             ratingDisplay.setRating(rating)
+            ratingDisplay.setRating(rating)
         }
         
         titleLabel.text = movie.title
