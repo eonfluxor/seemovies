@@ -286,7 +286,7 @@ extension MovieDetailView {
         }
         
         
-        Services.api.rx.resource(.getMovie(mid))
+        Services.api.rx.call(.getMovie(mid))
             .subscribe(onSuccess: { completion($0)})
             .disposed(by: diposeBag)
     }

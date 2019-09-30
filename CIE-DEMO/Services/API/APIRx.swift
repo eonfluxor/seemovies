@@ -8,64 +8,54 @@
 
 import UIKit
 import RxSwift
+import Alamofire
+import AlamofireObjectMapper
 
 
 extension Reactive where Base:APIService{
     
-    func resource(_ endpoint : APIEndpointName) -> Single<Movie> {
-        return Single<Movie>.create { single in
+    func call<K>(_ endpoint : APIEndpointName) -> Single<K> {
+        return Single<K>.create { single in
+            
+            let finish:(K?)->Void = { response in
+                guard let resource = response  else {
+                    assert(false, "Unexepcted response format")
+                    single(.error(Services.error.type(.networkFailure)))
+                }
+                
+                DispatchQueue.main.async {
+                    single(.success(resource))
+                }
+            }
             
             switch endpoint{
             case .getMovie(let movieId):
+                APIService
+                    .getMovie(APIEndpoints.movieInfo(movieId:movieId)
+                        ,completion: finish as! APIResourceClosure<Movie>)
                 
-                self.base.get(movieId: movieId){ movie in
-                    if let movie = movie {
-                        single(.success(movie))
-                    }else{
-                        single(.error(Services.error.message("foo")))
-                    }
-                }
+            case .getMovieRelated(let movieId):
+                APIService
+                    .getMovies(APIEndpoints.similarMovies(movieId:movieId)
+                        ,completion: finish as! APIResourceClosure<[Movie]>)
                 
-            default:
+                
+            case .getTrendingMovies(let page):
+                APIService
+                    .getMovies(APIEndpoints.trendingMovies(page:page)
+                        ,completion: finish as! APIResourceClosure<[Movie]>)
+                
                 break
             }
+            
             
             return Disposables.create()
         }
     }
     
-    func list(_ endpoint : APIEndpointName) -> Single<[Movie]> {
-        return Single<[Movie]>.create { single in
-            
-            switch endpoint{
-            
-                
-            case .getMovieRelated(let movieId):
-                
-                self.base.getSimilarTo(movieId: movieId){ movies in
-                    if let movies = movies {
-                        single(.success(movies))
-                    }else{
-                        single(.error(Services.error.type(.networkFailure)))
-                    }
-                }
-                
-                
-            case .getTrendingMovies(let page):
-               
-                self.base.getMoviesList(from: page){ movies in
-                    if let movies = movies {
-                        single(.success(movies))
-                    }else{
-                        single(.error(Services.error.type(.networkFailure)))
-                    }
-                }
-                
-            default:
-                break
-            }
-            
-            return Disposables.create()
-        }
-    }
+  
 }
+
+
+
+

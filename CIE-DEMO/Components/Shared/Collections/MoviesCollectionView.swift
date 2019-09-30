@@ -210,8 +210,8 @@ extension MoviesCollectionView {
         isLoading = true
         page+=1
         
-        Services.api.rx.list(.getTrendingMovies(page))
-            .subscribe(onSuccess: { [weak self] movies in
+        Services.api.rx.call(.getTrendingMovies(page))
+            .subscribe(onSuccess: { [weak self] (movies:[Movie]) in
                 
                 self?.isLoading = false
                 self?.refreshControl.endRefreshing()

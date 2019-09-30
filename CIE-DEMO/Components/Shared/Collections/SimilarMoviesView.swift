@@ -93,8 +93,8 @@ extension SimilarMoviesView {
             return
         }
         
-        Services.api.rx.list(.getMovieRelated(mid))
-            .subscribe(onSuccess: { [weak self] movies in
+        Services.api.rx.call(.getMovieRelated(mid))
+            .subscribe(onSuccess: { [weak self] (movies:[Movie]) in
                 
                 self?.movies = movies
                 self?.collectionView.reloadData()
