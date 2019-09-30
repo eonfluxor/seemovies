@@ -31,6 +31,6 @@ class MovieFavsCollectionView: MoviesCollectionView {
        
         refreshControl.endRefreshing()
         movies = Array(sorted)
-        collectionView.reloadData()
+        syncCollectionView()
     }
 }

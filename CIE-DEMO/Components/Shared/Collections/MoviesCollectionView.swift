@@ -89,6 +89,7 @@ extension MoviesCollectionView{
         self.dataSubject = dataSubject
         self.dataSource = dataSource
         
+       
     }
 }
 
