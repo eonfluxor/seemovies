@@ -16,7 +16,11 @@ target 'CIE-DEMO' do
     pod 'ReSwift', '~> 5.0'
     pod "DTPhotoViewerController"
     pod 'SwiftDate', '~> 6.1'
-    
+    pod 'RxSwift', '~> 5.0'
+    pod 'RxCocoa', '~> 5.0'
+    pod 'RxSwiftExt', '~> 5.1'
+    pod 'RxDataSources', '~> 4.0'
+     
     target 'CIE-DEMOTests' do
         inherit! :search_paths
     end
