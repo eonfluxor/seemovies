@@ -8,11 +8,14 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class MovieViewCell: UICollectionViewCell {
     
     let PADDING : CGFloat = 16.0
-   
+    let disposeBag = DisposeBag()
+    
     //refs
     var movie : Movie?
     //containers
@@ -48,7 +51,7 @@ class MovieViewCell: UICollectionViewCell {
         dateLabel.text = ""
         
         ratingDisplay.setRating(0)
-        posterView.rx.url.onNext(nil)
+        posterView.rx.imageURL.onNext(nil)
         
     }
     
@@ -88,18 +91,13 @@ extension MovieViewCell{
         
         if let poster = movie.poster_url {
             
-             posterView.rx.url.onNext(poster)
+            posterView.rx.displayImage(withUrl: poster)
+                .subscribe(onSuccess:  { [weak self] in self?.updatePalette(withImage: $0) },
+                           onError: { [weak self] error in self?.updatePalette(withImage: nil) })
+                .disposed(by: disposeBag)
             
-            posterView.displayImage(poster) { [weak self] image in
-                
-               
-                self?.updatePalette(withImage: image)
-            }
         }
-        
     }
-    
-    
 }
 
 extension MovieViewCell{
@@ -221,13 +219,19 @@ extension MovieViewCell{
             make.top.equalTo(ratingDisplay.snp_bottom)
             make.height.lessThanOrEqualTo(60)
         }
-        
-        
     }
     
     
-    func updatePalette(withImage image : UIImage) {
+    func updatePalette(withImage image : UIImage?) {
         
+        self.contentView.backgroundColor = Services.theme.MID_GREY
+        self.dateLabel.textColor = Services.theme.BLACK
+        self.titleLabel.textColor = Services.theme.BLACK
+        self.descLabel.textColor = Services.theme.BLACK
+        
+        guard let image = image else{
+            return
+        }
        
         DispatchQueue.global(qos: .background).async {
             
@@ -240,8 +244,6 @@ extension MovieViewCell{
                     self.dateLabel.textColor = textColor
                     self.titleLabel.textColor = textColor
                     self.descLabel.textColor = textColor
-               
-               
                
             }
         }
