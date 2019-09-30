@@ -8,15 +8,31 @@
 
 import UIKit
 
-enum APIEndpointName {
+enum APIEndpoints {
+    
     case getMovie(String)
     case getMovieRelated(String)
     case getTrendingMovies(Int)
+    
+    func url()->String{
+        
+        switch self {
+        case .getMovie(let movieId):
+             return signedUrl("https://api.themoviedb.org/3/movie/\(movieId)")
+            
+        case .getTrendingMovies(let page):
+             return signedUrl("https://api.themoviedb.org/3/trending/movie/day?page=\(page)")
+            
+        case .getMovieRelated(let movieId):
+              return signedUrl("https://api.themoviedb.org/3/movie/\(movieId)/recommendations")
+       
+        }
+    }
 }
 
-struct APIEndpoints {
-   
-    static func endpoint(_ urlstring:String)->String{
+extension APIEndpoints {
+    
+    fileprivate func signedUrl(_ urlstring:String)->String{
         
         let url = URL(string: urlstring)!
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
@@ -30,17 +46,5 @@ struct APIEndpoints {
         
         fatalError("this should never be reached")
     }
-    
-    static func trendingMovies(page: Int = 1)->String{
-        return endpoint("https://api.themoviedb.org/3/trending/movie/day?page=\(page)")
-    }
-    
-    static func similarMovies(movieId : String)->String{
-        return endpoint("https://api.themoviedb.org/3/movie/\(movieId)/recommendations")
-    }
-    
-    static func movieInfo(movieId : String)->String{
-        return endpoint("https://api.themoviedb.org/3/movie/\(movieId)")
-    }
-
 }
+

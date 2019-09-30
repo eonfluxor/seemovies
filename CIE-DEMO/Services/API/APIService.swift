@@ -23,7 +23,7 @@ class APIService: NSObject {
         Alamofire.request(endpointURL).responseObject(queue: APIService.QUEUE) { (response: DataResponse<Movie>) in
             
             guard let response = response.result.value else {
-                assert(false, "Unexepcted response format")
+                assert(false, "Unexpected response format")
                 completion(nil)   
             }
             
@@ -38,12 +38,12 @@ class APIService: NSObject {
         Alamofire.request(endpointURL).responseObject(queue: APIService.QUEUE) { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
-                assert(false, "Unexepcted response format")
+                assert(false, "Unexpected response format")
                 completion(nil)
             }
             
             guard let resource = response.results else {
-                assert(false, "Unexepcted response format")
+                assert(false, "Unexpected response format")
                 completion(nil)
             }
             
