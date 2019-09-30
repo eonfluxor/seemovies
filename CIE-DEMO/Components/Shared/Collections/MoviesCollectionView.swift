@@ -8,6 +8,9 @@
 
 import UIKit
 import Delayed
+import RxSwift
+import RxCocoa
+import RxDataSources
 
 // NOTE: I am not a big fan of the protocol / delegate pattern.
 // The same can be accomplished with a public closure.
@@ -20,6 +23,8 @@ class MoviesCollectionView: UIView {
     
     let PADDING : Int = 8
     let SEARCHBAR_HEIGHT: Int = 60
+    let disposeBag = DisposeBag()
+    
     var page = 1
     var isLoading = false
     var lastMoviesCount = 0
@@ -32,25 +37,61 @@ class MoviesCollectionView: UIView {
     
    
     var movies: [Movie] = []
+    var sections: [MoviesSection] = []
+    var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
+    var dataSubject : PublishSubject<[MoviesSection]>!
     
-    func dataFiltered()->[Movie] {
+    func dataFiltered()->[MoviesSection] {
+        
+        let sectionTitle = "Trending"
+        let uniqueMovies = uniq(movies)
         
         guard let searchString = searchString else {
-            return movies
+            return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
         }
         
         guard searchString.count > 2 else{
-            return movies
+            return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
         }
         
         let string = searchString.lowercased()
         
-        return movies.filter({ (movie) -> Bool in
+        let moviesFiltered = uniqueMovies.filter({ (movie) -> Bool in
             return movie.title.lowercased().contains(string) || movie.description.lowercased().contains(string)
         })
+        
+        return [MoviesSection(header: sectionTitle, items: moviesFiltered)]
     }
     
 }
+
+extension MoviesCollectionView{
+    
+    func setupRx(){
+        
+        let dataSubject = PublishSubject<[MoviesSection]>()
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<MoviesSection>(
+            configureCell:{ dataSource, tableView, indexPath, item in
+                let cell = tableView.dequeueReusableCell(withReuseIdentifier: self.cellName(), for: indexPath)  as! MovieViewCell
+              
+                cell.setupWithMovie(item)
+                
+                return cell
+        })
+        
+        dataSource.canMoveItemAtIndexPath = { dataSource, indexPath in
+            return true
+        }
+        dataSubject
+            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        self.dataSubject = dataSubject
+        self.dataSource = dataSource
+        
+    }
+}
+
 
 extension MoviesCollectionView : UISearchBarDelegate{
     
@@ -114,6 +155,7 @@ extension MoviesCollectionView {
     
     func setup(){
         setupCollectionView()
+        setupRx()
         setupPullToRefresh()
         setupSearch()
     }
@@ -123,8 +165,8 @@ extension MoviesCollectionView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
         collectionView.backgroundColor = .clear
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
         
         collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: cellName())
         
@@ -171,6 +213,7 @@ extension MoviesCollectionView {
             self?.isLoading = false
             self?.refreshControl.endRefreshing()
             self?.movies.append(contentsOf: movies)
+            
             self?.syncCollectionView()
         }
     }
@@ -192,45 +235,22 @@ extension MoviesCollectionView {
     
     func _syncCollectionView(){
         searchString = searchbar.text
-        
-        ///TODO:  We should use a diff mechanism and insert/ delete based on the patches
-        collectionView.reloadData()
+        dataSubject.onNext(dataFiltered())
     }
     
     func scrollToTop(){
-        if dataFiltered().count > 1 {
+        if dataFiltered()[0].items.count > 1 {
             collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
     }
 }
 
 
-
-extension MoviesCollectionView: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataFiltered().count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellName(), for: indexPath) as! MovieViewCell
-        
-        let movie = dataFiltered()[indexPath.row]
-        cell.setupWithMovie(movie)
-        
-        return cell
-    }
-}
-
 extension MoviesCollectionView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let movie = dataFiltered()[indexPath.row]
+        let movie = dataSource[indexPath]
         delegate?.didSelect(movie: movie)
     }
     

@@ -9,6 +9,7 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - Delayed (2.3.6)
+  - Differentiator (4.0.1)
   - DTPhotoViewerController (3.0.2)
   - ObjectMapper (3.5.1)
   - PINCache (3.0.1-beta.7):
@@ -27,6 +28,24 @@ PODS:
     - PINCache (= 3.0.1-beta.7)
     - PINRemoteImage/Core
   - ReSwift (5.0.0)
+  - RxCocoa (5.0.0):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRelay (5.0.0):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.0)
+  - RxSwiftExt (5.1.1):
+    - RxSwiftExt/Core (= 5.1.1)
+    - RxSwiftExt/RxCocoa (= 5.1.1)
+  - RxSwiftExt/Core (5.1.1):
+    - RxSwift (~> 5.0)
+  - RxSwiftExt/RxCocoa (5.1.1):
+    - RxCocoa (~> 5.0)
+    - RxSwiftExt/Core
   - SnapKit (4.0.1)
   - SwiftDate (6.1.0)
 
@@ -40,6 +59,10 @@ DEPENDENCIES:
   - ObjectMapper (~> 3.4)
   - PINRemoteImage (= 3.0.0-beta.14)
   - ReSwift (~> 5.0)
+  - RxCocoa (~> 5.0)
+  - RxDataSources (~> 4.0)
+  - RxSwift (~> 5.0)
+  - RxSwiftExt (~> 5.1)
   - SnapKit (~> 4.0.0)
   - SwiftDate (~> 6.1)
 
@@ -49,12 +72,18 @@ SPEC REPOS:
     - AlamofireImage
     - AlamofireObjectMapper
     - Delayed
+    - Differentiator
     - DTPhotoViewerController
     - ObjectMapper
     - PINCache
     - PINOperation
     - PINRemoteImage
     - ReSwift
+    - RxCocoa
+    - RxDataSources
+    - RxRelay
+    - RxSwift
+    - RxSwiftExt
     - SnapKit
     - SwiftDate
 
@@ -73,15 +102,21 @@ SPEC CHECKSUMS:
   AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   Delayed: 84ce53e7a16a9fb93fdda058e2a21334a6567645
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   DTPhotoViewerController: 20501ce30cbb7ef981c5adcc024bc4f3e6e63f1a
   ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   PINCache: 7cb9ae068c8f655717f7c644ef1dff9fd573e979
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: 81bbff853acc71c6de9e106e9e489a791b8bbb08
   ReSwift: 628f1a9b3ee52e3b3ca2a644435472fd77afafe1
+  RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
+  RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
+  RxSwiftExt: 0d2fd77523a169d1459be34961b996a194bdef0e
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   SwiftDate: fa2bb3962056bb44047b4b85a30044e5eae30b03
 
-PODFILE CHECKSUM: 04a43db2efddc0ec876cfec39004877e1eff96c8
+PODFILE CHECKSUM: 7bfab16f554ccc5405c7e2a9491c762b7acc7e8a
 
 COCOAPODS: 1.7.5
