@@ -22,14 +22,25 @@ protocol MoviesCollectionViewProtocol:AnyObject {
 struct MoviesSection {
     var header:String
     var items:[Item]
+    var uniqueId: String = "Trending"
 }
 
-extension MoviesSection: SectionModelType{
+extension MoviesSection: AnimatableSectionModelType{
+    
     typealias Item = Movie
+    typealias Identity = String
+    
+    init(header: String, items: [Item]) {
+        self.header = header
+        self.items = items
+    }
     
     init(original: MoviesSection, items: [Item]) {
         self = original
         self.items = items
+    }
+    var identity: String {
+        return uniqueId
     }
 }
 
@@ -52,24 +63,25 @@ class MoviesCollectionView: UIView {
    
     var movies: [Movie] = []
     var sections: [MoviesSection] = []
-    var dataSource : RxCollectionViewSectionedReloadDataSource<MoviesSection>!
+    var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
     
     func dataFiltered()->[MoviesSection] {
         
         let sectionTitle = "Trending"
+        let uniqueMovies = uniq(movies)
         
         guard let searchString = searchString else {
-            return [MoviesSection(header: sectionTitle, items: movies)]
+            return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
         }
         
         guard searchString.count > 2 else{
-            return [MoviesSection(header: sectionTitle, items: movies)]
+            return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
         }
         
         let string = searchString.lowercased()
         
-        let moviesFiltered = movies.filter({ (movie) -> Bool in
+        let moviesFiltered = uniqueMovies.filter({ (movie) -> Bool in
             return movie.title.lowercased().contains(string) || movie.description.lowercased().contains(string)
         })
         
@@ -83,7 +95,7 @@ extension MoviesCollectionView{
     func setupRx(){
         
         let dataSubject = PublishSubject<[MoviesSection]>()
-        let dataSource = RxCollectionViewSectionedReloadDataSource<MoviesSection>(
+        let dataSource = RxCollectionViewSectionedAnimatedDataSource<MoviesSection>(
             configureCell:{ dataSource, tableView, indexPath, item in
                 let cell = tableView.dequeueReusableCell(withReuseIdentifier: self.cellName(), for: indexPath)  as! MovieViewCell
               
@@ -91,22 +103,17 @@ extension MoviesCollectionView{
                 
                 return cell
         })
-        
-    
         dataSource.canMoveItemAtIndexPath = { dataSource, indexPath in
             return true
         }
-        
-      
-
         dataSubject
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        dataSubject.onNext(dataFiltered())
-        
         self.dataSubject = dataSubject
         self.dataSource = dataSource
+        
+        //syncCollectionView()
         
     }
 }
@@ -232,6 +239,7 @@ extension MoviesCollectionView {
             self?.isLoading = false
             self?.refreshControl.endRefreshing()
             self?.movies.append(contentsOf: movies)
+            
             self?.syncCollectionView()
         }
     }
@@ -253,38 +261,16 @@ extension MoviesCollectionView {
     
     func _syncCollectionView(){
         searchString = searchbar.text
-        
         dataSubject.onNext(dataFiltered())
     }
     
     func scrollToTop(){
-        if dataFiltered().count > 1 {
+        if dataFiltered()[0].items.count > 1 {
             collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
     }
 }
 
-
-
-//extension MoviesCollectionView: UICollectionViewDataSource {
-
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return 1
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return dataFiltered().count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellName(), for: indexPath) as! MovieViewCell
-//
-//        let movie = dataFiltered()[indexPath.row]
-//        cell.setupWithMovie(movie)
-//
-//        return cell
-//    }
-//}
 
 extension MoviesCollectionView: UICollectionViewDelegate {
     

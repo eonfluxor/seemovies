@@ -20,3 +20,8 @@ class Services {
     static let favs = FavoritesService()
     static let codable = CodableService()
 }
+
+func uniq<S: Sequence, E: Hashable>(_ source: S) -> [E] where E == S.Iterator.Element {
+    var seen = Set<E>()
+    return source.filter { seen.update(with: $0) == nil }
+}

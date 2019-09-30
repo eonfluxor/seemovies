@@ -9,6 +9,7 @@
 import UIKit
 import ObjectMapper
 import SwiftDate
+import RxDataSources
 
 struct Genre : Mappable, Codable{
     
@@ -27,6 +28,7 @@ struct Genre : Mappable, Codable{
         id = "\(idInt ?? 0)"
     }
 }
+
 
 struct Movie : Mappable, Codable{
     
@@ -93,3 +95,23 @@ struct Movie : Mappable, Codable{
     
 }
 
+
+extension Movie : IdentifiableType, Equatable{
+    
+    typealias Identity = Int
+    
+    var identity: Int {
+        return idInt!
+    }
+    
+    static func ==(lhs: Movie, rhs: Movie) -> Bool {
+        return lhs.idInt == rhs.idInt
+    }
+}
+
+extension Movie : Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(idInt)
+    }
+}
