@@ -48,8 +48,7 @@ class MovieViewCell: UICollectionViewCell {
         dateLabel.text = ""
         
         ratingDisplay.setRating(0)
-        posterView.displayImage(nil)
-        
+        posterView.rx.url.onNext(nil)
         
     }
     
@@ -88,6 +87,8 @@ extension MovieViewCell{
         }
         
         if let poster = movie.poster_url {
+            
+             posterView.rx.url.onNext(poster)
             
             posterView.displayImage(poster) { [weak self] image in
                 

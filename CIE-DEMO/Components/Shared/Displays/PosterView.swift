@@ -9,6 +9,8 @@
 import UIKit
 import PINCache
 import PINRemoteImage
+import RxSwift
+import RxCocoa
 
 class PosterView: UIImageView {
     
@@ -61,5 +63,13 @@ extension PosterView {
         
         Services.router.presentImageViewPreview(self)
         
+    }
+}
+
+extension Reactive where Base:PosterView{
+    var url: Binder<String?> {
+        return Binder(self.base) { view, url in
+            view.displayImage(url)
+        }
     }
 }
