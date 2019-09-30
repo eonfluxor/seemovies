@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2627A62E23424678002944FF /* APIRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627A62D23424678002944FF /* APIRx.swift */; };
+		2627A62F234249C2002944FF /* APIRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627A62D23424678002944FF /* APIRx.swift */; };
+		2627A63223424A96002944FF /* ErrorsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627A63123424A96002944FF /* ErrorsService.swift */; };
 		263D61292341B02500236EDB /* MoviesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263D61272341AFFA00236EDB /* MoviesSection.swift */; };
 		263D612A2341B02600236EDB /* MoviesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263D61272341AFFA00236EDB /* MoviesSection.swift */; };
 		264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA01F2336AF4300C4293B /* AppDelegate.swift */; };
@@ -95,6 +98,8 @@
 		186EFE981BF4F6F9F3111C91 /* Pods_CIE_DEMO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CIE_DEMO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F22F5E72A2E0E5F96BBAD91 /* Pods_CIE_DEMOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CIE_DEMOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		258853681545C6C79163C2C8 /* Pods-CIE-DEMOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.release.xcconfig"; sourceTree = "<group>"; };
+		2627A62D23424678002944FF /* APIRx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRx.swift; sourceTree = "<group>"; };
+		2627A63123424A96002944FF /* ErrorsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorsService.swift; sourceTree = "<group>"; };
 		263D61272341AFFA00236EDB /* MoviesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesSection.swift; sourceTree = "<group>"; };
 		264CA01C2336AF4300C4293B /* CIE-DEMO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CIE-DEMO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264CA01F2336AF4300C4293B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +166,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2627A63023424A86002944FF /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				2627A63123424A96002944FF /* ErrorsService.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
 		264CA0132336AF4300C4293B = {
 			isa = PBXGroup;
 			children = (
@@ -226,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				264CA0482336AFED00C4293B /* Services.swift */,
+				2627A63023424A86002944FF /* Errors */,
 				264CA0812336F4C700C4293B /* Codable */,
 				264CA0762336E1A600C4293B /* Favorites */,
 				264CA06F2336CA9700C4293B /* Flux */,
@@ -248,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				264CA04E2336B01000C4293B /* APIService.swift */,
+				2627A62D23424678002944FF /* APIRx.swift */,
 				264CA0502336B03600C4293B /* APIEndpoints.swift */,
 				264CA0522336B03E00C4293B /* APIResponses.swift */,
 			);
@@ -551,6 +566,7 @@
 			files = (
 				264CA0532336B03E00C4293B /* APIResponses.swift in Sources */,
 				264CA05E2336B0A800C4293B /* FavoritesViewController.swift in Sources */,
+				2627A62E23424678002944FF /* APIRx.swift in Sources */,
 				264CA06A2336B12300C4293B /* RatingView.swift in Sources */,
 				26F94898233709870092E27E /* MovieDetailView.swift in Sources */,
 				264CA07C2336F04900C4293B /* FluxReducer.swift in Sources */,
@@ -564,6 +580,7 @@
 				264CA0622336B0C400C4293B /* ImageViewController.swift in Sources */,
 				264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */,
 				264CA0512336B03600C4293B /* APIEndpoints.swift in Sources */,
+				2627A63223424A96002944FF /* ErrorsService.swift in Sources */,
 				264CA0732336D46E00C4293B /* FluxActions.swift in Sources */,
 				264CA0432336AFAC00C4293B /* UIColor+Extras.swift in Sources */,
 				26F948A2233714940092E27E /* SimilarMoviesView.swift in Sources */,
@@ -592,6 +609,7 @@
 			files = (
 				26F948C223380F240092E27E /* MovieDetailView.swift in Sources */,
 				26F948A923380E360092E27E /* FavoritesService.swift in Sources */,
+				2627A62F234249C2002944FF /* APIRx.swift in Sources */,
 				26F948B523380F240092E27E /* RootViewController.swift in Sources */,
 				26F948BC23380F240092E27E /* MovieDetailCellView.swift in Sources */,
 				26F948A623380E0D0092E27E /* APITests.swift in Sources */,

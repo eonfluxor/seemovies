@@ -77,7 +77,7 @@ extension Reactive where Base:PosterView{
                 if let image = image {
                     single(.success(image))
                 }else{
-                    single(.error(NSError(domain: "network error", code: 0, userInfo: [url:url])))
+                    single(.error(NSError(domain: "network error", code: 0, userInfo: ["url":url])))
                 }
             }
             

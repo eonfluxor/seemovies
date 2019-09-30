@@ -210,13 +210,18 @@ extension MoviesCollectionView {
         isLoading = true
         page+=1
         
-        Services.api.getMoviesList(from : page) { [weak self] (movies) in
-            self?.isLoading = false
-            self?.refreshControl.endRefreshing()
-            self?.movies.append(contentsOf: movies)
-            
-            self?.syncCollectionView()
-        }
+        Services.api.rx.list(.getTrendingMovies(page))
+            .subscribe(onSuccess: { [weak self] movies in
+                
+                self?.isLoading = false
+                self?.refreshControl.endRefreshing()
+                self?.movies.append(contentsOf: movies)
+                
+                self?.syncCollectionView()
+                
+            }).disposed(by: disposeBag)
+        
+        
     }
     
     @objc func isInfiniteFeed()->Bool{

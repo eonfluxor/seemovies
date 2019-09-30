@@ -20,6 +20,7 @@ class Services {
     static let flux = fluxStore
     static let favs = FavoritesService()
     static let codable = CodableService()
+    static let error = ErrorsService()
 }
 
 func uniq<S: Sequence, E: Hashable>(_ source: S) -> [E] where E == S.Iterator.Element {

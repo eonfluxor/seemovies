@@ -8,6 +8,7 @@
 
 import UIKit
 import ChameleonFramework
+import RxSwift
 
 class MovieDetailView: UIView {
     
@@ -36,6 +37,7 @@ class MovieDetailView: UIView {
     var overviewLabel : UILabel!
     var favoriteButton : FavButton!
     
+    let diposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -283,9 +285,10 @@ extension MovieDetailView {
             return
         }
         
-        Services.api.get(movieId: mid) { (movie) in
-            completion(movie)
-        }
+        
+        Services.api.rx.resource(.getMovie(mid))
+            .subscribe(onSuccess: { completion($0)})
+            .disposed(by: diposeBag)
     }
     
     func updatePalette(withImage image : UIImage) {

@@ -8,8 +8,14 @@
 
 import UIKit
 
+enum APIEndpointName {
+    case getMovie(String)
+    case getMovieRelated(String)
+    case getTrendingMovies(Int)
+}
+
 struct APIEndpoints {
-    
+   
     static func trendingMovies(page: Int = 1)->String{
         return "https://api.themoviedb.org/3/trending/movie/day?page=\(page)"
     }

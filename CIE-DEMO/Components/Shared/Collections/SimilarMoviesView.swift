@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class SimilarMoviesView: UIView {
 
@@ -20,6 +21,8 @@ class SimilarMoviesView: UIView {
     var didSelect : MovieClosure?
     var movies: [Movie] = []
     var movie : Movie!
+    
+    let disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         
@@ -90,11 +93,14 @@ extension SimilarMoviesView {
             return
         }
         
-        Services.api.getSimilarTo(movieId: mid ) { [weak self] (movies) in
-          
-            self?.movies = movies
-            self?.collectionView.reloadData()
-        }
+        Services.api.rx.list(.getMovieRelated(mid))
+            .subscribe(onSuccess: { [weak self] movies in
+                
+                self?.movies = movies
+                self?.collectionView.reloadData()
+                
+            }).disposed(by: disposeBag)
+        
     }
 }
 

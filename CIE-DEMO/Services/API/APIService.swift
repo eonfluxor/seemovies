@@ -11,7 +11,9 @@ import Alamofire
 import AlamofireObjectMapper
 
 typealias APIMovieListCompletion = ([Movie])->Void
+typealias APIMovieListOptCompletion = ([Movie]?)->Void
 typealias APIMovieCompletion = (Movie)->Void
+typealias APIMovieOptCompletion = (Movie?)->Void
 
 
 class APIService: NSObject {
@@ -35,11 +37,12 @@ class APIService: NSObject {
         fatalError("this should never be reached")
     }
     
-    func getMoviesList(from page:Int = 1, _ completion:@escaping APIMovieListCompletion)->Void{
+    func getMoviesList(from page:Int = 1, _ completion:@escaping APIMovieListOptCompletion)->Void{
         Alamofire.request(endpoint(APIEndpoints.trendingMovies(page: page))).responseObject(queue: QUEUE) { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
+                completion(nil)
             }
             DispatchQueue.main.async {
                 completion(response.results ?? []);
@@ -47,11 +50,12 @@ class APIService: NSObject {
         }
     }
     
-    func getSimilarTo(movieId : String, _ completion:@escaping APIMovieListCompletion) {
+    func getSimilarTo(movieId : String, _ completion:@escaping APIMovieListOptCompletion) {
         Alamofire.request(endpoint(APIEndpoints.similarMovies(movieId:movieId))).responseObject(queue: QUEUE) { (response: DataResponse<APIResponseMovieList>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
+                completion(nil)
             }
             DispatchQueue.main.async {
                 completion(response.results ?? []);
@@ -59,11 +63,12 @@ class APIService: NSObject {
         }
     }
     
-    func get(movieId : String, _ completion:@escaping APIMovieCompletion) {
+    func get(movieId : String, _ completion:@escaping APIMovieOptCompletion) {
         Alamofire.request(endpoint(APIEndpoints.movieInfo(movieId:movieId))).responseObject(queue: QUEUE) { (response: DataResponse<Movie>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexepcted response format")
+                completion(nil);
             }
             
             DispatchQueue.main.async {
@@ -71,7 +76,7 @@ class APIService: NSObject {
             }
         }
     }
-    
-    
-    
 }
+
+
+
