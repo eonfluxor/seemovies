@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		263D61292341B02500236EDB /* MoviesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263D61272341AFFA00236EDB /* MoviesSection.swift */; };
+		263D612A2341B02600236EDB /* MoviesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263D61272341AFFA00236EDB /* MoviesSection.swift */; };
 		264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264CA01F2336AF4300C4293B /* AppDelegate.swift */; };
 		264CA0292336AF4400C4293B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264CA0282336AF4400C4293B /* Assets.xcassets */; };
 		264CA02C2336AF4400C4293B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 264CA02A2336AF4400C4293B /* LaunchScreen.storyboard */; };
@@ -93,6 +95,7 @@
 		186EFE981BF4F6F9F3111C91 /* Pods_CIE_DEMO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CIE_DEMO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F22F5E72A2E0E5F96BBAD91 /* Pods_CIE_DEMOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CIE_DEMOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		258853681545C6C79163C2C8 /* Pods-CIE-DEMOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.release.xcconfig"; sourceTree = "<group>"; };
+		263D61272341AFFA00236EDB /* MoviesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesSection.swift; sourceTree = "<group>"; };
 		264CA01C2336AF4300C4293B /* CIE-DEMO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CIE-DEMO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264CA01F2336AF4300C4293B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		264CA0282336AF4400C4293B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -214,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				264CA0462336AFD700C4293B /* Movie.swift */,
+				263D61272341AFFA00236EDB /* MoviesSection.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -567,6 +571,7 @@
 				26F948A42337E05A0092E27E /* DisplayGenericCell.swift in Sources */,
 				264CA0802336F0F900C4293B /* FluxState.swift in Sources */,
 				264CA04D2336B00700C4293B /* ThemeService.swift in Sources */,
+				263D61292341B02500236EDB /* MoviesSection.swift in Sources */,
 				264CA04F2336B01000C4293B /* APIService.swift in Sources */,
 				264CA0602336B0B700C4293B /* DetailViewController.swift in Sources */,
 				264CA0712336CAAB00C4293B /* FluxStore.swift in Sources */,
@@ -607,6 +612,7 @@
 				26F948C123380F240092E27E /* FavButton.swift in Sources */,
 				26F948C523380F2D0092E27E /* Movie.swift in Sources */,
 				26F948A823380E360092E27E /* CodableService.swift in Sources */,
+				263D612A2341B02600236EDB /* MoviesSection.swift in Sources */,
 				26F948B723380F240092E27E /* FavoritesViewController.swift in Sources */,
 				26F948AC23380E360092E27E /* FluxActions.swift in Sources */,
 				26F948C023380F240092E27E /* MoviesCollectionView+Favs.swift in Sources */,

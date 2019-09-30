@@ -19,31 +19,6 @@ protocol MoviesCollectionViewProtocol:AnyObject {
     func didSelect(movie : Movie) //todo pass selected index and/or object
 }
 
-struct MoviesSection {
-    var header:String
-    var items:[Item]
-    var uniqueId: String = "Trending"
-}
-
-extension MoviesSection: AnimatableSectionModelType{
-    
-    typealias Item = Movie
-    typealias Identity = String
-    
-    init(header: String, items: [Item]) {
-        self.header = header
-        self.items = items
-    }
-    
-    init(original: MoviesSection, items: [Item]) {
-        self = original
-        self.items = items
-    }
-    var identity: String {
-        return uniqueId
-    }
-}
-
 class MoviesCollectionView: UIView {
     
     let PADDING : Int = 8
@@ -103,6 +78,7 @@ extension MoviesCollectionView{
                 
                 return cell
         })
+        
         dataSource.canMoveItemAtIndexPath = { dataSource, indexPath in
             return true
         }
@@ -112,8 +88,6 @@ extension MoviesCollectionView{
         
         self.dataSubject = dataSubject
         self.dataSource = dataSource
-        
-        //syncCollectionView()
         
     }
 }
