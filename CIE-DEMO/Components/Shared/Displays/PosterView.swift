@@ -29,7 +29,7 @@ class PosterView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func displayImage(_ url:String?, completion:ImageClosureOpt? = nil){
+    func displayImage(_ url:String?, completion:ImageClosureOpt? = nil){
         
         self.image = nil
         
