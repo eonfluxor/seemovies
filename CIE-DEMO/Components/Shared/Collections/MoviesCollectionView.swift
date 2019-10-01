@@ -211,11 +211,11 @@ extension MoviesCollectionView {
         page+=1
         
         Services.api.rx.call(.getTrendingMovies(page))
-            .subscribe(onSuccess: { [weak self] (movies:[Movie]) in
+            .subscribe(onSuccess: { [weak self] (response:APIResponseMovieList) in
                 
                 self?.isLoading = false
                 self?.refreshControl.endRefreshing()
-                self?.movies.append(contentsOf: movies)
+                self?.movies.append(contentsOf: response.items(Movie.self))
                 
                 self?.syncCollectionView()
                 

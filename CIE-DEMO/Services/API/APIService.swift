@@ -9,8 +9,9 @@
 import UIKit
 import Alamofire
 import AlamofireObjectMapper
+import ObjectMapper
 
-typealias APIResourceClosure<K> = (K?)->Void
+typealias APIClosure<K> = (K?)->Void
 
 class APIService: NSObject {
     
@@ -18,37 +19,22 @@ class APIService: NSObject {
     static let API_KEY_V3 = "43af0066f64198f00c8d98d9d347b31f"
     static let QUEUE = DispatchQueue(label: "com.test.api", qos: .background, attributes: .concurrent)
     
-    static func getMovie(_ endpointURL:String, completion: @escaping APIResourceClosure<Movie>) -> Void {
+    
+    static func get<K:Mappable>(_ endpoint:APIEndpoints, completion: @escaping APIClosure<K>) -> Void {
+        APIService.get(endpoint.url(), completion: completion)
+    }
+    
+    static func get<K:Mappable>(_ endpointURL:String, completion: @escaping APIClosure<K>) -> Void {
         
-        Alamofire.request(endpointURL).responseObject(queue: APIService.QUEUE) { (response: DataResponse<Movie>) in
+        Alamofire.request(endpointURL).responseObject(queue: APIService.QUEUE) { (response: DataResponse<K>) in
             
             guard let response = response.result.value else {
                 assert(false, "Unexpected response format")
-                completion(nil)   
+                completion(nil)
             }
             
             DispatchQueue.main.async {
                 completion(response)
-            }
-        }
-    }
-    
-    static func getMovies(_ endpointURL:String, completion: @escaping APIResourceClosure<[Movie]>) -> Void {
-        
-        Alamofire.request(endpointURL).responseObject(queue: APIService.QUEUE) { (response: DataResponse<APIResponseMovieList>) in
-            
-            guard let response = response.result.value else {
-                assert(false, "Unexpected response format")
-                completion(nil)
-            }
-            
-            guard let resource = response.results else {
-                assert(false, "Unexpected response format")
-                completion(nil)
-            }
-            
-            DispatchQueue.main.async {
-                completion(resource)
             }
         }
     }

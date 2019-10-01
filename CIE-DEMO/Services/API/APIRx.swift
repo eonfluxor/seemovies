@@ -14,7 +14,7 @@ import AlamofireObjectMapper
 
 extension Reactive where Base:APIService{
     
-    func call<K>(_ endpoint : APIEndpoints) -> Single<K> {
+    func call<K:APIResponse>(_ endpoint : APIEndpoints) -> Single<K> {
         return Single<K>.create { single in
             
             let finish:(K?)->Void = { response in
@@ -31,21 +31,12 @@ extension Reactive where Base:APIService{
             switch endpoint{
             case .getMovie:
                 APIService
-                    .getMovie(endpoint.url()
-                        ,completion: finish as! APIResourceClosure<Movie>)
+                    .get(endpoint,completion: finish as! APIClosure<Movie>)
                 
-            case .getMovieRelated:
+            case .getMovieRelated, .getTrendingMovies:
                 APIService
-                    .getMovies(endpoint.url()
-                        ,completion: finish as! APIResourceClosure<[Movie]>)
+                    .get(endpoint,completion: finish as! APIClosure<APIResponseMovieList>)
                 
-                
-            case .getTrendingMovies:
-                APIService
-                    .getMovies(endpoint.url()
-                        ,completion: finish as! APIResourceClosure<[Movie]>)
-                
-                break
             }
             
             return Disposables.create()

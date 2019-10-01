@@ -9,7 +9,19 @@
 import UIKit
 import ObjectMapper
 
-struct APIResponseMovieList: Mappable {
+protocol APIResponse {
+    func items<K>(_ type:K.Type?)->[K]
+}
+
+extension APIResponse{
+    func  items<K>(_ type:K.Type?)->[K]{
+        return ([self] as? [K]) ?? []
+    }
+}
+
+extension Movie: APIResponse{}
+
+struct APIResponseMovieList: Mappable,APIResponse {
     
     var page: Int?
     var results: [Movie]?
@@ -23,5 +35,12 @@ struct APIResponseMovieList: Mappable {
         results <- map["results"]
     }
     
+    func  items<K>(_ type:K.Type?)->[K]{
+        return (results as? [K]) ?? []
+    }
+    
 }
+
+
+
 
