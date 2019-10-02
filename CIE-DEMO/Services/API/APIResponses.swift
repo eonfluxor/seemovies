@@ -13,13 +13,12 @@ protocol APIResponse {
     func items<K>(_ type:K.Type?)->[K]
 }
 
-extension APIResponse{
+
+extension Movie: APIResponse{
     func  items<K>(_ type:K.Type? = nil)->[K]{
         return ([self] as? [K]) ?? []
     }
 }
-
-extension Movie: APIResponse{}
 
 struct APIResponseMovieList: Mappable,APIResponse {
     
@@ -35,7 +34,7 @@ struct APIResponseMovieList: Mappable,APIResponse {
         results <- map["results"]
     }
     
-    func  items<K>(_ type:K.Type?)->[K]{
+    func  items<K>(_ type:K.Type? = nil)->[K]{
         return (results as? [K]) ?? []
     }
     
