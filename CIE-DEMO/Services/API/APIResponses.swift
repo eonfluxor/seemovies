@@ -10,15 +10,16 @@ import UIKit
 import ObjectMapper
 
 protocol APIResponse {
-    func items<K>(_ type:K.Type?)->[K]
+    func  items<K>(_ type:K.Type? )->[K]
 }
 
-
-extension Movie: APIResponse{
+extension APIResponse{
     func  items<K>(_ type:K.Type? = nil)->[K]{
         return ([self] as? [K]) ?? []
     }
 }
+
+extension Movie: APIResponse{}
 
 struct APIResponseMovieList: Mappable,APIResponse {
     
