@@ -14,7 +14,7 @@ protocol APIResponse {
 }
 
 extension APIResponse{
-    func  items<K>(_ type:K.Type?)->[K]{
+    func  items<K>(_ type:K.Type? = nil)->[K]{
         return ([self] as? [K]) ?? []
     }
 }

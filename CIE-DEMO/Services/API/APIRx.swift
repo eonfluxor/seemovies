@@ -11,13 +11,12 @@ import RxSwift
 import Alamofire
 import AlamofireObjectMapper
 
-
 extension Reactive where Base:APIService{
     
     func call<K:APIResponse>(_ endpoint : APIEndpoints) -> Single<K> {
         return Single<K>.create { single in
             
-            let finish:(K?)->Void = { response in
+            let finish:APIClosure<K> = { response in
                 guard let resource = response  else {
                     assert(false, "Unexpected response format")
                     single(.error(Services.error.type(.networkFailure)))
@@ -43,7 +42,6 @@ extension Reactive where Base:APIService{
         }
     }
     
-  
 }
 
 

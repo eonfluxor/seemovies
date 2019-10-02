@@ -215,7 +215,7 @@ extension MoviesCollectionView {
                 
                 self?.isLoading = false
                 self?.refreshControl.endRefreshing()
-                self?.movies.append(contentsOf: response.items(Movie.self))
+                self?.movies.append(contentsOf: response.items())
                 
                 self?.syncCollectionView()
                 

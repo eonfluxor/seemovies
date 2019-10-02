@@ -18,13 +18,13 @@ enum APIEndpoints {
         
         switch self {
         case .getMovie(let movieId):
-             return signedUrl("https://api.themoviedb.org/3/movie/\(movieId)")
+             return signedUrl("/movie/\(movieId)")
             
         case .getTrendingMovies(let page):
-             return signedUrl("https://api.themoviedb.org/3/trending/movie/day?page=\(page)")
+             return signedUrl("/trending/movie/day?page=\(page)")
             
         case .getMovieRelated(let movieId):
-              return signedUrl("https://api.themoviedb.org/3/movie/\(movieId)/recommendations")
+              return signedUrl("/movie/\(movieId)/recommendations")
        
         }
     }
@@ -32,19 +32,49 @@ enum APIEndpoints {
 
 extension APIEndpoints {
     
-    fileprivate func signedUrl(_ urlstring:String)->String{
+    
+    fileprivate func apiBaseURL()->String{
+       
+        return "https://api.themoviedb.org/3"
+    }
+    
+    fileprivate func signedUrl(_ path:String)->String{
         
-        let url = URL(string: urlstring)!
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        var queryItems =  Array(components.queryItems ?? [])
-        queryItems.append( URLQueryItem(name: "api_key", value: APIService.API_KEY_V3))
-        components.queryItems = queryItems
+        let urlstring = "\(apiBaseURL())\(path)"
         
-        if let finalstring = try? components.asURL().absoluteString {
+        guard let url = URL(string: urlstring) else{
+            assert(false,"this should never be reached")
+            return urlstring
+        }
+        
+        let signatureParams = ["api_key": APIService.API_KEY_V3]
+        let composedURL = APIService.compose(url: url, params: signatureParams)
+        
+        if let finalstring =  composedURL?.absoluteString {
             return finalstring
         }
         
-        fatalError("this should never be reached")
+        assert(false,"this should never be reached")
+        return urlstring
+    }
+    
+    
+}
+
+extension APIService {
+    
+    static func compose(url:URL, params:[String:String])->URL?{
+        
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        var queryItems =  Array(components.queryItems ?? [])
+        
+        params.forEach { param in
+             queryItems.append( URLQueryItem(name: param.key, value: param.value))
+        }
+        components.queryItems = queryItems
+        
+        return try? components.asURL()
+        
     }
 }
 

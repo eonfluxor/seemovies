@@ -96,7 +96,7 @@ extension SimilarMoviesView {
         Services.api.rx.call(.getMovieRelated(mid))
             .subscribe(onSuccess: { [weak self] (response:APIResponseMovieList) in
                 
-                self?.movies = response.items(Movie.self)
+                self?.movies = response.items()
                 self?.collectionView.reloadData()
                 
             }).disposed(by: disposeBag)
