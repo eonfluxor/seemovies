@@ -108,9 +108,16 @@ extension MoviesCollectionView{
                 
             }).disposed(by: disposeBag)
         
+//        isLoading
+//            .drive(refreshControl.rx.isRefreshing)
+//            .disposed(by: disposeBag)
+        
         isLoading
-            .drive(refreshControl.rx.isRefreshing)
-            .disposed(by: disposeBag)
+            .drive(onNext: { (loading) in
+                
+                self.refreshControl.rx.isRefreshing.onNext(loading)
+                
+            }).disposed(by: disposeBag)
         
         currentPage
             .drive(onNext:{ [weak self] currentPage in

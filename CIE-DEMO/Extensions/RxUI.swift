@@ -26,7 +26,7 @@ public class BehaviorDriver<Element>: NSObject {
     }
     
     public func accept(_ event: Element) {
-        accept(event)
+        behavior.accept(event)
     }
     
     public func drive(onNext: ((Element) -> Void)? = nil, onCompleted: (() -> Void)? = nil, onDisposed: (() -> Void)? = nil) -> Disposable {
