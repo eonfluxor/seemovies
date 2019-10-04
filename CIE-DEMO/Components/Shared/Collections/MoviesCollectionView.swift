@@ -12,12 +12,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-// NOTE: I am not a big fan of the protocol / delegate pattern.
-// The same can be accomplished with a public closure.
-// There is a sample of this in the SimilarMoviesView
-//protocol MoviesCollectionViewProtocol:AnyObject {
-//    func didSelect(movie : Movie) //todo pass selected index and/or object
-//}
 
 class MoviesCollectionView: UIView {
     
@@ -28,7 +22,6 @@ class MoviesCollectionView: UIView {
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
     var searchbar : UISearchBar!
-//    weak var delegate :MoviesCollectionViewProtocol?
     
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
