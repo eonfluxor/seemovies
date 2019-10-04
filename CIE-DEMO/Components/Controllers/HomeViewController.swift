@@ -8,9 +8,11 @@
 
 import UIKit
 import Delayed
+import RxSwift
 
 class HomeViewController: BaseViewController  {
     
+    let disposeBag = DisposeBag()
     var list : MoviesCollectionView!
     
     override func viewDidLoad() {
@@ -39,7 +41,11 @@ extension HomeViewController{
     func setupCollectionView(){
         let list = MoviesCollectionView()
         list.setup()
-        list.delegate = self
+        list.selectedMovie.drive(onNext:{ movie in
+            if let movie = movie {
+                Services.router.pushDetailViewController(movie: movie)
+            }
+        }).disposed(by: disposeBag)
         
         view.addSubview(list)
         
@@ -63,14 +69,3 @@ extension HomeViewController{
     }
 }
 
-extension HomeViewController: MoviesCollectionViewProtocol{
-  
-    
-    
-    func didSelect( movie:Movie) {
-        Services.router.pushDetailViewController(movie: movie)
-        //        let detailAnimator = NavAnimators.ZoomOut()
-        //        Services.router.tab(.Home).push(controller: .MovieDetail, info:NavInfo(params:["movie":movie]), animator:detailAnimator)
-        
-    }
-}

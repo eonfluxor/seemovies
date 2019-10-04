@@ -15,9 +15,9 @@ import RxDataSources
 // NOTE: I am not a big fan of the protocol / delegate pattern.
 // The same can be accomplished with a public closure.
 // There is a sample of this in the SimilarMoviesView
-protocol MoviesCollectionViewProtocol:AnyObject {
-    func didSelect(movie : Movie) //todo pass selected index and/or object
-}
+//protocol MoviesCollectionViewProtocol:AnyObject {
+//    func didSelect(movie : Movie) //todo pass selected index and/or object
+//}
 
 class MoviesCollectionView: UIView {
     
@@ -28,7 +28,7 @@ class MoviesCollectionView: UIView {
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
     var searchbar : UISearchBar!
-    weak var delegate :MoviesCollectionViewProtocol?
+//    weak var delegate :MoviesCollectionViewProtocol?
     
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
@@ -37,7 +37,7 @@ class MoviesCollectionView: UIView {
     let isLoading = UIRelay<Bool>(value: false)
     let currentPage =  UIRelay<Int>(value: 1)
     let searchString =  UIRelay<String?>(value: nil)
-    
+    public let selectedMovie = UIRelay<Movie?>(value: nil)
 }
 extension MoviesCollectionView {
     
@@ -116,19 +116,16 @@ extension MoviesCollectionView{
             }).disposed(by: disposeBag)
         
         isLoading
-            .driver
             .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
         
         currentPage
-            .driver
             .drive(onNext:{ [weak self] currentPage in
                 self?.loadMovies()
             })
             .disposed(by: disposeBag)
         
         searchString
-            .driver
             .drive( onNext:{ [weak self] searchString in
                 guard let this = self else { return }
                 
@@ -301,7 +298,7 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let movie = dataSource[indexPath]
-        delegate?.didSelect(movie: movie)
+        selectedMovie.accept(movie)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
