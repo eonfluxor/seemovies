@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class UIRelay<Element>: NSObject {
+public class BehaviorDriver<Element>: NSObject {
     
     var behavior: BehaviorRelay<Element>!
     var driver: Driver<Element> {

@@ -33,11 +33,11 @@ class MoviesCollectionView: UIView {
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
     
-    let movies = UIRelay<[Movie]>(value: [])
-    let isLoading = UIRelay<Bool>(value: false)
-    let currentPage =  UIRelay<Int>(value: 1)
-    let searchString =  UIRelay<String?>(value: nil)
-    public let selectedMovie = UIRelay<Movie?>(value: nil)
+    let movies = BehaviorDriver<[Movie]>(value: [])
+    let isLoading = BehaviorDriver<Bool>(value: false)
+    let currentPage =  BehaviorDriver<Int>(value: 1)
+    let searchString =  BehaviorDriver<String?>(value: nil)
+    public let selectedMovie = BehaviorDriver<Movie?>(value: nil)
 }
 extension MoviesCollectionView {
     
