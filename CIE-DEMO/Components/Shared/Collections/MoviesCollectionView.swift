@@ -25,7 +25,7 @@ class MoviesCollectionView: UIView {
     let SEARCHBAR_HEIGHT: Int = 60
     let disposeBag = DisposeBag()
     
-    var page = 1
+    var page = 0
     var isLoading = false
     var lastMoviesCount = 0
     
@@ -36,15 +36,19 @@ class MoviesCollectionView: UIView {
     weak var delegate :MoviesCollectionViewProtocol?
     
    
-    var movies: [Movie] = []
     var sections: [MoviesSection] = []
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
     
+    var moviesBehavior = BehaviorRelay<[Movie]>(value: [])
+    var movies: Driver<[Movie]> {
+        return moviesBehavior.asDriver()
+    }
+    
     func dataFiltered()->[MoviesSection] {
         
-        let sectionTitle = "Trending"
-        let uniqueMovies = uniq(movies)
+        let sectionTitle = "Movies"
+        let uniqueMovies = uniq(moviesBehavior.value)
         
         guard let searchString = searchString else {
             return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
@@ -63,11 +67,20 @@ class MoviesCollectionView: UIView {
         return [MoviesSection(header: sectionTitle, items: moviesFiltered)]
     }
     
+    func dataFiltered(section: Int)->[Movie] {
+        return dataFiltered()[section].items
+    }
+    
 }
 
 extension MoviesCollectionView{
     
     func setupRx(){
+        setupRxCollectionView()
+        setupRxDrivers()
+    }
+    
+    func setupRxCollectionView(){
         
         let dataSubject = PublishSubject<[MoviesSection]>()
         let dataSource = RxCollectionViewSectionedAnimatedDataSource<MoviesSection>(
@@ -89,7 +102,20 @@ extension MoviesCollectionView{
         self.dataSubject = dataSubject
         self.dataSource = dataSource
         
-       
+    }
+    
+    func setupRxDrivers(){
+        
+        movies
+            .throttle(.milliseconds(500), latest: true)
+            .drive(onNext:{ [weak self] moviesBehavior in
+                
+                guard let this = self else { return }
+                
+                this.captureSearchString()
+                this.dataSubject.onNext(this.dataFiltered())
+                
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -147,6 +173,10 @@ extension MoviesCollectionView : UISearchBarDelegate{
             self.searchbar.text = ""
         }
       
+    }
+    
+    func captureSearchString(){
+        searchString = searchbar?.text
     }
    
     
@@ -210,14 +240,21 @@ extension MoviesCollectionView {
         isLoading = true
         page+=1
         
+         print("moviesBehavior loading \(page)")
+        
         Services.api.rx.call(.getTrendingMovies(page))
             .subscribe(onSuccess: { [weak self] (response:APIResponseMovieList) in
                 
-                self?.isLoading = false
-                self?.refreshControl.endRefreshing()
-                self?.movies.append(contentsOf: response.items())
                 
-                self?.syncCollectionView()
+                guard let this = self else {
+                    return
+                }
+                
+                this.isLoading = false
+                this.refreshControl.endRefreshing()
+                
+                this.moviesBehavior.accept(this.moviesBehavior.value +  response.items())
+                
                 
             }).disposed(by: disposeBag)
         
@@ -240,12 +277,12 @@ extension MoviesCollectionView {
     }
     
     func _syncCollectionView(){
-        searchString = searchbar.text
+        searchString = searchbar?.text
         dataSubject.onNext(dataFiltered())
     }
     
     func scrollToTop(){
-        if dataFiltered()[0].items.count > 1 {
+        if dataFiltered(section: 0).count > 1 {
             collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
     }
@@ -262,7 +299,7 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
-        if isInfiniteFeed() && indexPath.row == movies.count - 2 {
+        if isInfiniteFeed() && indexPath.row == dataFiltered(section: 0).count - 2 {
             loadMovies()
         }
     }
