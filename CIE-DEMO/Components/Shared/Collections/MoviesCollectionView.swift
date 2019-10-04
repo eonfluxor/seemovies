@@ -25,32 +25,18 @@ class MoviesCollectionView: UIView {
     let SEARCHBAR_HEIGHT: Int = 60
     let disposeBag = DisposeBag()
     
-    var page = 0
-//    var isLoading = false
-    var lastMoviesCount = 0
-    
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
     var searchbar : UISearchBar!
-    var searchString : String? = nil
     weak var delegate :MoviesCollectionViewProtocol?
     
-   
-    var sections: [MoviesSection] = []
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
     
-    var mov = UIRelay<[Movie]>(value: [])
-    
-    var moviesBehavior = BehaviorRelay<[Movie]>(value: [])
-    var movies: Driver<[Movie]> {
-        return moviesBehavior.asDriver()
-    }
-    
-    var isLoadingBehavior = BehaviorRelay<Bool>(value: false)
-    var isLoading: Driver<Bool> {
-        return isLoadingBehavior.asDriver()
-    }
+    let movies = UIRelay<[Movie]>(value: [])
+    let isLoading = UIRelay<Bool>(value: false)
+    let currentPage =  UIRelay<Int>(value: 1)
+    let searchString =  UIRelay<String?>(value: nil)
     
 }
 extension MoviesCollectionView {
@@ -58,9 +44,9 @@ extension MoviesCollectionView {
     func dataFiltered()->[MoviesSection] {
         
         let sectionTitle = "Movies"
-        let uniqueMovies = uniq(moviesBehavior.value)
+        let uniqueMovies = uniq(movies.value())
         
-        guard let searchString = searchString else {
+        guard let searchString = searchString.value() else {
             return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
         }
         
@@ -117,19 +103,39 @@ extension MoviesCollectionView{
     func setupRxDrivers(){
         
         movies
+            .driver
             .throttle(.milliseconds(500), latest: true)
-            .drive(onNext:{ [weak self] moviesBehavior in
+            .drive(onNext:{ [weak self] movies in
                 
                 guard let this = self else { return }
                 
                 this.captureSearchString()
+                this.isLoading.behavior.accept(false)
                 this.dataSubject.onNext(this.dataFiltered())
                 
             }).disposed(by: disposeBag)
         
-        
         isLoading
-            .drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
+            .driver
+            .drive(refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+        
+        currentPage
+            .driver
+            .drive(onNext:{ [weak self] currentPage in
+                self?.loadMovies()
+            })
+            .disposed(by: disposeBag)
+        
+        searchString
+            .driver
+            .drive( onNext:{ [weak self] searchString in
+                guard let this = self else { return }
+                
+                this.dataSubject.onNext(this.dataFiltered())
+            })
+            .disposed(by: disposeBag)
+        
     }
 }
 
@@ -150,7 +156,6 @@ extension MoviesCollectionView : UISearchBarDelegate{
         if let txfSearchField  = searchBar .value(forKey: "_searchField") as? UITextField {
             txfSearchField.backgroundColor =  .clear
         }
-       
         
         addSubview(searchBar)
         
@@ -161,24 +166,31 @@ extension MoviesCollectionView : UISearchBarDelegate{
             make.width.equalToSuperview()
         }
         
-        self.searchbar = searchBar
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-       
-        if searchText == ""  {
-            cancelSearching()
-            endEditing(true)
-        }
+        searchBar.rx.cancelButtonClicked.asDriver().drive(onNext:{ [weak self] _ in
+            self?.cancelSearching()
+            
+        }).disposed(by: disposeBag)
         
-        syncCollectionView()
-        scrollToTop()
-    }
-    
-   
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        endEditing(true)
+        searchBar.rx.searchButtonClicked.asDriver().drive(onNext:{ [weak self] _ in
+            self?.endEditing(true)
+            
+        }).disposed(by: disposeBag)
+        
+        searchBar.rx.text.asDriver().drive( onNext:{ [weak self] searchText in
+           guard let this = self else { return }
+            
+            if searchText == ""  {
+                this.cancelSearching()
+                this.endEditing(true)
+            }
+            
+            this.searchString.accept(searchText)
+            this.dataSubject?.onNext(this.dataFiltered())
+            this.scrollToTop()
+            
+        }).disposed(by: disposeBag)
+        
+        self.searchbar = searchBar
     }
     
     func cancelSearching(){
@@ -186,14 +198,12 @@ extension MoviesCollectionView : UISearchBarDelegate{
             self.searchbar.resignFirstResponder()
             self.searchbar.text = ""
         }
-      
     }
     
     func captureSearchString(){
-        searchString = searchbar?.text
+        searchString.accept(searchbar?.text)
     }
    
-    
 }
 
 extension MoviesCollectionView {
@@ -211,7 +221,6 @@ extension MoviesCollectionView {
         
         collectionView.backgroundColor = .clear
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
-        
         
         collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: cellName())
         
@@ -232,8 +241,13 @@ extension MoviesCollectionView {
     func setupPullToRefresh(){
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action:
-            #selector(self.handleRefresh),for: .valueChanged)
+        refreshControl.rx.controlEvent([.valueChanged]).asDriver().drive(onNext:{ [weak self] _ in
+            
+            self?.movies.accept([])
+            self?.currentPage.accept(1)
+            
+        }).disposed(by: disposeBag)
+        
         
         collectionView.addSubview(refreshControl)
     }
@@ -242,34 +256,26 @@ extension MoviesCollectionView {
 
 extension MoviesCollectionView {
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        loadMovies()
-    }
-    
     @objc func loadMovies(){
         
-        guard !isLoadingBehavior.value else {
+        guard !isLoading.value() else {
             return
         }
-        isLoadingBehavior.accept(true)
-        page+=1
+        isLoading.behavior.accept(true)
+       
+        print("moviesBehavior loading \(currentPage.value())")
         
-         print("moviesBehavior loading \(page)")
-        
-        Services.api.rx.call(.getTrendingMovies(page))
+        Services.api.rx.call(.getTrendingMovies(currentPage.value()))
             .subscribe(onSuccess: { [weak self] (response:APIResponseMovieList) in
-                
                 
                 guard let this = self else {
                     return
                 }
                 
-                this.isLoadingBehavior.accept(false)
-                this.moviesBehavior.accept(this.moviesBehavior.value +  response.items())
+                this.movies.behavior.accept( this.movies.value() +  response.items())
                 
                 
             }).disposed(by: disposeBag)
-        
         
     }
     
@@ -281,18 +287,7 @@ extension MoviesCollectionView {
         return "MovieCell"
     }
     
-    func syncCollectionView() {
-        Kron.debounceLast(timeOut: 0.25, resetKey: self) { (key, ctx) in
-            self._syncCollectionView()
-        }
-        
-    }
-    
-    func _syncCollectionView(){
-        searchString = searchbar?.text
-        dataSubject.onNext(dataFiltered())
-    }
-    
+  
     func scrollToTop(){
         if dataFiltered(section: 0).count > 1 {
             collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
@@ -312,7 +307,8 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
         if isInfiniteFeed() && indexPath.row == dataFiltered(section: 0).count - 2 {
-            loadMovies()
+          
+            currentPage.accept(currentPage.value() + 1)
         }
     }
 }

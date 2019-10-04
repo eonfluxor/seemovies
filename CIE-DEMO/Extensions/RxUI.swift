@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public final class UIRelay<Element>: NSObject {
+public class UIRelay<Element>: NSObject {
     
     var behavior: BehaviorRelay<Element>!
     var driver: Driver<Element> {
@@ -19,5 +19,13 @@ public final class UIRelay<Element>: NSObject {
 
     public init(value: Element) {
        behavior =  BehaviorRelay<Element>(value: value)
+    }
+    
+    public func value()->Element {
+        return behavior.value
+    }
+    
+    public func accept(_ event: Element) {
+        behavior.accept(event)
     }
 }

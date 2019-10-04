@@ -28,6 +28,6 @@ class MovieFavsCollectionView: MoviesCollectionView {
         }
         
         let sorted = favValues.sorted(by:{ $0.sortIndex > $1.sortIndex })
-        moviesBehavior.accept(sorted)
+        movies.behavior.accept(sorted)
     }
 }
