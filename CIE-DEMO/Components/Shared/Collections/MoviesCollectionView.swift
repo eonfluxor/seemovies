@@ -26,7 +26,7 @@ class MoviesCollectionView: UIView {
     let disposeBag = DisposeBag()
     
     var page = 0
-    var isLoading = false
+//    var isLoading = false
     var lastMoviesCount = 0
     
     var collectionView: UICollectionView!
@@ -40,10 +40,20 @@ class MoviesCollectionView: UIView {
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
     
+    var mov = UIRelay<[Movie]>(value: [])
+    
     var moviesBehavior = BehaviorRelay<[Movie]>(value: [])
     var movies: Driver<[Movie]> {
         return moviesBehavior.asDriver()
     }
+    
+    var isLoadingBehavior = BehaviorRelay<Bool>(value: false)
+    var isLoading: Driver<Bool> {
+        return isLoadingBehavior.asDriver()
+    }
+    
+}
+extension MoviesCollectionView {
     
     func dataFiltered()->[MoviesSection] {
         
@@ -116,6 +126,10 @@ extension MoviesCollectionView{
                 this.dataSubject.onNext(this.dataFiltered())
                 
             }).disposed(by: disposeBag)
+        
+        
+        isLoading
+            .drive(refreshControl.rx.isRefreshing).disposed(by: disposeBag)
     }
 }
 
@@ -186,9 +200,9 @@ extension MoviesCollectionView {
     
     func setup(){
         setupCollectionView()
-        setupRx()
         setupPullToRefresh()
         setupSearch()
+        setupRx()
     }
     
     func setupCollectionView(){
@@ -234,10 +248,10 @@ extension MoviesCollectionView {
     
     @objc func loadMovies(){
         
-        guard !isLoading  else {
+        guard !isLoadingBehavior.value else {
             return
         }
-        isLoading = true
+        isLoadingBehavior.accept(true)
         page+=1
         
          print("moviesBehavior loading \(page)")
@@ -250,9 +264,7 @@ extension MoviesCollectionView {
                     return
                 }
                 
-                this.isLoading = false
-                this.refreshControl.endRefreshing()
-                
+                this.isLoadingBehavior.accept(false)
                 this.moviesBehavior.accept(this.moviesBehavior.value +  response.items())
                 
                 
