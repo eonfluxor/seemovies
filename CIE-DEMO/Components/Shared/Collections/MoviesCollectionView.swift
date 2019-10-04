@@ -103,7 +103,7 @@ extension MoviesCollectionView{
                 guard let this = self else { return }
                 
                 this.captureSearchString()
-                this.isLoading.behavior.accept(false)
+                this.isLoading.accept(false)
                 this.dataSubject.onNext(this.dataFiltered())
                 
             }).disposed(by: disposeBag)
@@ -251,7 +251,7 @@ extension MoviesCollectionView {
         guard !isLoading.value() else {
             return
         }
-        isLoading.behavior.accept(true)
+        isLoading.accept(true)
        
         print("moviesBehavior loading \(currentPage.value())")
         
@@ -262,7 +262,7 @@ extension MoviesCollectionView {
                     return
                 }
                 
-                this.movies.behavior.accept( this.movies.value() +  response.items())
+                this.movies.accept( this.movies.value() +  response.items())
                 
                 
             }).disposed(by: disposeBag)
