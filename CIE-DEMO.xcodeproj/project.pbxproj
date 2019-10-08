@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261444D62347C8490065A5FB /* RxUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261444D42347C60F0065A5FB /* RxUI.swift */; };
+		261444D72347C8490065A5FB /* RxUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261444D42347C60F0065A5FB /* RxUI.swift */; };
 		2627A62E23424678002944FF /* APIRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627A62D23424678002944FF /* APIRx.swift */; };
 		2627A62F234249C2002944FF /* APIRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627A62D23424678002944FF /* APIRx.swift */; };
 		2627A63223424A96002944FF /* ErrorsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627A63123424A96002944FF /* ErrorsService.swift */; };
@@ -98,6 +100,7 @@
 		186EFE981BF4F6F9F3111C91 /* Pods_CIE_DEMO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CIE_DEMO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F22F5E72A2E0E5F96BBAD91 /* Pods_CIE_DEMOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CIE_DEMOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		258853681545C6C79163C2C8 /* Pods-CIE-DEMOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CIE-DEMOTests.release.xcconfig"; path = "Target Support Files/Pods-CIE-DEMOTests/Pods-CIE-DEMOTests.release.xcconfig"; sourceTree = "<group>"; };
+		261444D42347C60F0065A5FB /* RxUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxUI.swift; sourceTree = "<group>"; };
 		2627A62D23424678002944FF /* APIRx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRx.swift; sourceTree = "<group>"; };
 		2627A63123424A96002944FF /* ErrorsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorsService.swift; sourceTree = "<group>"; };
 		263D61272341AFFA00236EDB /* MoviesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesSection.swift; sourceTree = "<group>"; };
@@ -222,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				264CA0422336AFAC00C4293B /* UIColor+Extras.swift */,
+				261444D42347C60F0065A5FB /* RxUI.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -580,6 +584,7 @@
 				264CA0622336B0C400C4293B /* ImageViewController.swift in Sources */,
 				264CA0202336AF4300C4293B /* AppDelegate.swift in Sources */,
 				264CA0512336B03600C4293B /* APIEndpoints.swift in Sources */,
+				261444D62347C8490065A5FB /* RxUI.swift in Sources */,
 				2627A63223424A96002944FF /* ErrorsService.swift in Sources */,
 				264CA0732336D46E00C4293B /* FluxActions.swift in Sources */,
 				264CA0432336AFAC00C4293B /* UIColor+Extras.swift in Sources */,
@@ -616,6 +621,7 @@
 				26F948AF23380E360092E27E /* RouterService.swift in Sources */,
 				26F948AD23380E360092E27E /* FluxReducer.swift in Sources */,
 				26F948B623380F240092E27E /* HomeViewController.swift in Sources */,
+				261444D72347C8490065A5FB /* RxUI.swift in Sources */,
 				26F948BE23380F240092E27E /* SimilarMoviesView.swift in Sources */,
 				26F948BB23380F240092E27E /* DisplayGenericCell.swift in Sources */,
 				26F948A723380E240092E27E /* Services.swift in Sources */,

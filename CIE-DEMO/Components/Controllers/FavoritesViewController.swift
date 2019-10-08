@@ -9,11 +9,13 @@
 import UIKit
 import Delayed
 import ReSwift
+import RxSwift
 
 class FavoritesViewController: BaseViewController {
     
     typealias StoreSubscriberStateType = FluxState
     
+    let disposeBag = DisposeBag()
     var list : MovieFavsCollectionView!
     
     override func viewDidLoad() {
@@ -56,13 +58,19 @@ extension FavoritesViewController{
     func setupCollectionView(){
         let list = MovieFavsCollectionView()
         list.setup()
-        list.delegate = self
+        list.selectedMovie.drive(onNext:{ movie in
+            if let movie = movie {
+                Services.router.pushDetailViewController(movie: movie)
+            }
+        }).disposed(by: disposeBag)
+        
         view.addSubview(list)
         
-        
         list.snp_makeConstraints { (make) in
-            make.edges.equalToSuperview()
-            make.center.equalToSuperview()
+            make.left.equalTo(view.safeAreaInsets.left)
+            make.right.equalTo(view.safeAreaInsets.right)
+            make.top.equalTo(0)
+            make.bottom.equalTo(view.snp_bottomMargin)
         }
         
         self.list = list
@@ -77,12 +85,3 @@ extension FavoritesViewController{
     }
 }
 
-extension FavoritesViewController: MoviesCollectionViewProtocol{
-    
-    func didSelect( movie:Movie) {
-        Services.router.pushDetailViewController(movie: movie)
-        //        let detailAnimator = NavAnimators.ZoomOut()
-        //        Services.router.tab(.Home).push(controller: .MovieDetail, info:NavInfo(params:["movie":movie]), animator:detailAnimator)
-        
-    }
-}

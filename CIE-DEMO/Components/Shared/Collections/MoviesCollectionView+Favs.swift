@@ -28,9 +28,6 @@ class MovieFavsCollectionView: MoviesCollectionView {
         }
         
         let sorted = favValues.sorted(by:{ $0.sortIndex > $1.sortIndex })
-       
-        refreshControl.endRefreshing()
-        movies = Array(sorted)
-        syncCollectionView()
+        movies.accept(sorted)
     }
 }

@@ -12,12 +12,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-// NOTE: I am not a big fan of the protocol / delegate pattern.
-// The same can be accomplished with a public closure.
-// There is a sample of this in the SimilarMoviesView
-protocol MoviesCollectionViewProtocol:AnyObject {
-    func didSelect(movie : Movie) //todo pass selected index and/or object
-}
 
 class MoviesCollectionView: UIView {
     
@@ -25,28 +19,27 @@ class MoviesCollectionView: UIView {
     let SEARCHBAR_HEIGHT: Int = 60
     let disposeBag = DisposeBag()
     
-    var page = 1
-    var isLoading = false
-    var lastMoviesCount = 0
-    
     var collectionView: UICollectionView!
     var refreshControl : UIRefreshControl!
     var searchbar : UISearchBar!
-    var searchString : String? = nil
-    weak var delegate :MoviesCollectionViewProtocol?
     
-   
-    var movies: [Movie] = []
-    var sections: [MoviesSection] = []
     var dataSource : RxCollectionViewSectionedAnimatedDataSource<MoviesSection>!
     var dataSubject : PublishSubject<[MoviesSection]>!
     
+    let movies = BehaviorDriver<[Movie]>(value: [])
+    let isLoading = BehaviorDriver<Bool>(value: false)
+    let currentPage =  BehaviorDriver<Int>(value: 1)
+    let searchString =  BehaviorDriver<String?>(value: nil)
+    public let selectedMovie = BehaviorDriver<Movie?>(value: nil)
+}
+extension MoviesCollectionView {
+    
     func dataFiltered()->[MoviesSection] {
         
-        let sectionTitle = "Trending"
-        let uniqueMovies = uniq(movies)
+        let sectionTitle = "Movies"
+        let uniqueMovies = uniq(movies.value())
         
-        guard let searchString = searchString else {
+        guard let searchString = searchString.value() else {
             return [MoviesSection(header: sectionTitle, items: uniqueMovies)]
         }
         
@@ -63,11 +56,20 @@ class MoviesCollectionView: UIView {
         return [MoviesSection(header: sectionTitle, items: moviesFiltered)]
     }
     
+    func dataFiltered(section: Int)->[Movie] {
+        return dataFiltered()[section].items
+    }
+    
 }
 
 extension MoviesCollectionView{
     
     func setupRx(){
+        setupRxCollectionView()
+        setupRxDrivers()
+    }
+    
+    func setupRxCollectionView(){
         
         let dataSubject = PublishSubject<[MoviesSection]>()
         let dataSource = RxCollectionViewSectionedAnimatedDataSource<MoviesSection>(
@@ -89,7 +91,48 @@ extension MoviesCollectionView{
         self.dataSubject = dataSubject
         self.dataSource = dataSource
         
-       
+    }
+    
+    func setupRxDrivers(){
+        
+        movies
+            .driver
+            .throttle(.milliseconds(500), latest: true)
+            .drive(onNext:{ [weak self] movies in
+                
+                guard let this = self else { return }
+                
+                this.captureSearchString()
+                this.isLoading.accept(false)
+                this.dataSubject.onNext(this.dataFiltered())
+                
+            }).disposed(by: disposeBag)
+        
+//        isLoading
+//            .drive(refreshControl.rx.isRefreshing)
+//            .disposed(by: disposeBag)
+        
+        isLoading
+            .drive(onNext: { (loading) in
+                
+                self.refreshControl.rx.isRefreshing.onNext(loading)
+                
+            }).disposed(by: disposeBag)
+        
+        currentPage
+            .drive(onNext:{ [weak self] currentPage in
+                self?.loadMovies()
+            })
+            .disposed(by: disposeBag)
+        
+        searchString
+            .drive( onNext:{ [weak self] searchString in
+                guard let this = self else { return }
+                
+                this.dataSubject.onNext(this.dataFiltered())
+            })
+            .disposed(by: disposeBag)
+        
     }
 }
 
@@ -110,7 +153,6 @@ extension MoviesCollectionView : UISearchBarDelegate{
         if let txfSearchField  = searchBar .value(forKey: "_searchField") as? UITextField {
             txfSearchField.backgroundColor =  .clear
         }
-       
         
         addSubview(searchBar)
         
@@ -121,24 +163,31 @@ extension MoviesCollectionView : UISearchBarDelegate{
             make.width.equalToSuperview()
         }
         
-        self.searchbar = searchBar
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-       
-        if searchText == ""  {
-            cancelSearching()
-            endEditing(true)
-        }
+        searchBar.rx.cancelButtonClicked.asDriver().drive(onNext:{ [weak self] _ in
+            self?.cancelSearching()
+            
+        }).disposed(by: disposeBag)
         
-        syncCollectionView()
-        scrollToTop()
-    }
-    
-   
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        endEditing(true)
+        searchBar.rx.searchButtonClicked.asDriver().drive(onNext:{ [weak self] _ in
+            self?.endEditing(true)
+            
+        }).disposed(by: disposeBag)
+        
+        searchBar.rx.text.asDriver().drive( onNext:{ [weak self] searchText in
+           guard let this = self else { return }
+            
+            if searchText == ""  {
+                this.cancelSearching()
+                this.endEditing(true)
+            }
+            
+            this.searchString.accept(searchText)
+            this.dataSubject?.onNext(this.dataFiltered())
+            this.scrollToTop()
+            
+        }).disposed(by: disposeBag)
+        
+        self.searchbar = searchBar
     }
     
     func cancelSearching(){
@@ -146,19 +195,21 @@ extension MoviesCollectionView : UISearchBarDelegate{
             self.searchbar.resignFirstResponder()
             self.searchbar.text = ""
         }
-      
+    }
+    
+    func captureSearchString(){
+        searchString.accept(searchbar?.text)
     }
    
-    
 }
 
 extension MoviesCollectionView {
     
     func setup(){
         setupCollectionView()
-        setupRx()
         setupPullToRefresh()
         setupSearch()
+        setupRx()
     }
     
     func setupCollectionView(){
@@ -167,7 +218,6 @@ extension MoviesCollectionView {
         
         collectionView.backgroundColor = .clear
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
-        
         
         collectionView.register(MovieViewCell.self, forCellWithReuseIdentifier: cellName())
         
@@ -188,8 +238,13 @@ extension MoviesCollectionView {
     func setupPullToRefresh(){
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action:
-            #selector(self.handleRefresh),for: .valueChanged)
+        refreshControl.rx.controlEvent([.valueChanged]).asDriver().drive(onNext:{ [weak self] _ in
+            
+            self?.movies.accept([])
+            self?.currentPage.accept(1)
+            
+        }).disposed(by: disposeBag)
+        
         
         collectionView.addSubview(refreshControl)
     }
@@ -198,29 +253,26 @@ extension MoviesCollectionView {
 
 extension MoviesCollectionView {
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        loadMovies()
-    }
-    
     @objc func loadMovies(){
         
-        guard !isLoading  else {
+        guard !isLoading.value() else {
             return
         }
-        isLoading = true
-        page+=1
+        isLoading.accept(true)
+       
+        print("moviesBehavior loading \(currentPage.value())")
         
-        Services.api.rx.call(.getTrendingMovies(page))
+        Services.api.rx.call(.getTrendingMovies(currentPage.value()))
             .subscribe(onSuccess: { [weak self] (response:APIResponseMovieList) in
                 
-                self?.isLoading = false
-                self?.refreshControl.endRefreshing()
-                self?.movies.append(contentsOf: response.items())
+                guard let this = self else {
+                    return
+                }
                 
-                self?.syncCollectionView()
+                this.movies.accept( this.movies.value() +  response.items())
+                
                 
             }).disposed(by: disposeBag)
-        
         
     }
     
@@ -232,20 +284,9 @@ extension MoviesCollectionView {
         return "MovieCell"
     }
     
-    func syncCollectionView() {
-        Kron.debounceLast(timeOut: 0.25, resetKey: self) { (key, ctx) in
-            self._syncCollectionView()
-        }
-        
-    }
-    
-    func _syncCollectionView(){
-        searchString = searchbar.text
-        dataSubject.onNext(dataFiltered())
-    }
-    
+  
     func scrollToTop(){
-        if dataFiltered()[0].items.count > 1 {
+        if dataFiltered(section: 0).count > 1 {
             collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
     }
@@ -257,13 +298,14 @@ extension MoviesCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let movie = dataSource[indexPath]
-        delegate?.didSelect(movie: movie)
+        selectedMovie.accept(movie)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
-        if isInfiniteFeed() && indexPath.row == movies.count - 2 {
-            loadMovies()
+        if isInfiniteFeed() && indexPath.row == dataFiltered(section: 0).count - 2 {
+          
+            currentPage.accept(currentPage.value() + 1)
         }
     }
 }
